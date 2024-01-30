@@ -1,4 +1,4 @@
-package com.wolt.domain;
+package com.wolt;
 
 
 import org.springframework.boot.SpringApplication;

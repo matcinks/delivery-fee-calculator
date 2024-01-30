@@ -1,6 +1,7 @@
 package com.wolt.domain.deliveryfeecalculator;
 
-import com.wolt.domain.deliveryfeecalculator.dto.CalculatedDeliveryFeeDto;
+import com.wolt.domain.deliveryfeecalculator.dto.DeliveryFeeCalculatorResponseDto;
+import com.wolt.domain.deliveryfeecalculator.dto.OrderDataDto;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -17,18 +18,18 @@ class DeliveryFeeCalculatorFacadeTest {
         BigInteger deliveryDistanceInMeters = BigInteger.valueOf(499);
         BigInteger numberOfItemsInCart = BigInteger.valueOf(4);
         String orderDate = "2024-01-19T14:59:59Z";
-        DeliveryFeeCalculatorFacade deliveryFeeCalculatorFacade = new DeliveryFeeCalculatorFacade();
-        OrderData orderData = OrderData.builder()
+        DeliveryFeeCalculatorFacade deliveryFeeCalculatorFacade = new DeliveryFeeCalculatorConfiguration().deliveryFeeCalculatorFacade();
+        OrderDataDto orderDataDto = OrderDataDto.builder()
                 .cartValue(cartValueInEuroCents)
                 .deliveryDistance(deliveryDistanceInMeters)
                 .numberOfItems(numberOfItemsInCart)
                 .orderTime(orderDate)
                 .build();
         // when
-        CalculatedDeliveryFeeDto calculatedDeliveryFeeDto = deliveryFeeCalculatorFacade.calculateDeliveryFee(orderData);
+        DeliveryFeeCalculatorResponseDto deliveryFeeCalculatorResponseDto = deliveryFeeCalculatorFacade.calculateDeliveryFee(orderDataDto);
         // then
         BigInteger expectedDeliveryFee = BigInteger.valueOf(1 + 1_00);
-        assertThat(calculatedDeliveryFeeDto.calculatedDeliveryFee()).isEqualTo(expectedDeliveryFee);
+        assertThat(deliveryFeeCalculatorResponseDto.deliveryFee()).isEqualTo(expectedDeliveryFee);
     }
 
     @Test
@@ -38,18 +39,18 @@ class DeliveryFeeCalculatorFacadeTest {
         BigInteger deliveryDistanceInMeters = BigInteger.valueOf(1000);
         BigInteger numberOfItemsInCart = BigInteger.valueOf(4);
         String orderDate = "2024-01-19T14:59:59Z";
-        DeliveryFeeCalculatorFacade deliveryFeeCalculatorFacade = new DeliveryFeeCalculatorFacade();
-        OrderData orderData = OrderData.builder()
+        DeliveryFeeCalculatorFacade deliveryFeeCalculatorFacade = new DeliveryFeeCalculatorConfiguration().deliveryFeeCalculatorFacade();
+        OrderDataDto orderDataDto = OrderDataDto.builder()
                 .cartValue(cartValueInEuroCents)
                 .deliveryDistance(deliveryDistanceInMeters)
                 .numberOfItems(numberOfItemsInCart)
                 .orderTime(orderDate)
                 .build();
         // when
-        CalculatedDeliveryFeeDto calculatedDeliveryFeeDto = deliveryFeeCalculatorFacade.calculateDeliveryFee(orderData);
+        DeliveryFeeCalculatorResponseDto deliveryFeeCalculatorResponseDto = deliveryFeeCalculatorFacade.calculateDeliveryFee(orderDataDto);
         // then
         BigInteger expectedDeliveryFee = BigInteger.valueOf(2_00);
-        assertThat(calculatedDeliveryFeeDto.calculatedDeliveryFee()).isEqualTo(expectedDeliveryFee);
+        assertThat(deliveryFeeCalculatorResponseDto.deliveryFee()).isEqualTo(expectedDeliveryFee);
     }
 
     @Test
@@ -59,18 +60,18 @@ class DeliveryFeeCalculatorFacadeTest {
         BigInteger deliveryDistanceInMeters = BigInteger.valueOf(1499);
         BigInteger numberOfItemsInCart = BigInteger.valueOf(4);
         String orderDate = "2024-01-19T14:59:59Z";
-        DeliveryFeeCalculatorFacade deliveryFeeCalculatorFacade = new DeliveryFeeCalculatorFacade();
-        OrderData orderData = OrderData.builder()
+        DeliveryFeeCalculatorFacade deliveryFeeCalculatorFacade = new DeliveryFeeCalculatorConfiguration().deliveryFeeCalculatorFacade();
+        OrderDataDto orderDataDto = OrderDataDto.builder()
                 .cartValue(cartValueInEuroCents)
                 .deliveryDistance(deliveryDistanceInMeters)
                 .numberOfItems(numberOfItemsInCart)
                 .orderTime(orderDate)
                 .build();
         // when
-        CalculatedDeliveryFeeDto calculatedDeliveryFeeDto = deliveryFeeCalculatorFacade.calculateDeliveryFee(orderData);
+        DeliveryFeeCalculatorResponseDto deliveryFeeCalculatorResponseDto = deliveryFeeCalculatorFacade.calculateDeliveryFee(orderDataDto);
         // then
         BigInteger expectedDeliveryFee = BigInteger.valueOf(3_00);
-        assertThat(calculatedDeliveryFeeDto.calculatedDeliveryFee()).isEqualTo(expectedDeliveryFee);
+        assertThat(deliveryFeeCalculatorResponseDto.deliveryFee()).isEqualTo(expectedDeliveryFee);
     }
 
     @Test
@@ -80,18 +81,18 @@ class DeliveryFeeCalculatorFacadeTest {
         BigInteger deliveryDistanceInMeters = BigInteger.valueOf(1500);
         BigInteger numberOfItemsInCart = BigInteger.valueOf(4);
         String orderDate = "2024-01-19T14:59:59Z";
-        DeliveryFeeCalculatorFacade deliveryFeeCalculatorFacade = new DeliveryFeeCalculatorFacade();
-        OrderData orderData = OrderData.builder()
+        DeliveryFeeCalculatorFacade deliveryFeeCalculatorFacade = new DeliveryFeeCalculatorConfiguration().deliveryFeeCalculatorFacade();
+        OrderDataDto orderDataDto = OrderDataDto.builder()
                 .cartValue(cartValueInEuroCents)
                 .deliveryDistance(deliveryDistanceInMeters)
                 .numberOfItems(numberOfItemsInCart)
                 .orderTime(orderDate)
                 .build();
         // when
-        CalculatedDeliveryFeeDto calculatedDeliveryFeeDto = deliveryFeeCalculatorFacade.calculateDeliveryFee(orderData);
+        DeliveryFeeCalculatorResponseDto deliveryFeeCalculatorResponseDto = deliveryFeeCalculatorFacade.calculateDeliveryFee(orderDataDto);
         // then
         BigInteger expectedDeliveryFee = BigInteger.valueOf(3_00);
-        assertThat(calculatedDeliveryFeeDto.calculatedDeliveryFee()).isEqualTo(expectedDeliveryFee);
+        assertThat(deliveryFeeCalculatorResponseDto.deliveryFee()).isEqualTo(expectedDeliveryFee);
     }
 
     @Test
@@ -101,18 +102,18 @@ class DeliveryFeeCalculatorFacadeTest {
         BigInteger deliveryDistanceInMeters = BigInteger.valueOf(1501);
         BigInteger numberOfItemsInCart = BigInteger.valueOf(4);
         String orderDate = "2024-01-19T14:59:59Z";
-        DeliveryFeeCalculatorFacade deliveryFeeCalculatorFacade = new DeliveryFeeCalculatorFacade();
-        OrderData orderData = OrderData.builder()
+        DeliveryFeeCalculatorFacade deliveryFeeCalculatorFacade = new DeliveryFeeCalculatorConfiguration().deliveryFeeCalculatorFacade();
+        OrderDataDto orderDataDto = OrderDataDto.builder()
                 .cartValue(cartValueInEuroCents)
                 .deliveryDistance(deliveryDistanceInMeters)
                 .numberOfItems(numberOfItemsInCart)
                 .orderTime(orderDate)
-                .build();
+                .build();;
         // when
-        CalculatedDeliveryFeeDto calculatedDeliveryFeeDto = deliveryFeeCalculatorFacade.calculateDeliveryFee(orderData);
+        DeliveryFeeCalculatorResponseDto deliveryFeeCalculatorResponseDto = deliveryFeeCalculatorFacade.calculateDeliveryFee(orderDataDto);
         // then
         BigInteger expectedDeliveryFee = BigInteger.valueOf(4_00);
-        assertThat(calculatedDeliveryFeeDto.calculatedDeliveryFee()).isEqualTo(expectedDeliveryFee);
+        assertThat(deliveryFeeCalculatorResponseDto.deliveryFee()).isEqualTo(expectedDeliveryFee);
     }
 
     @Test
@@ -122,18 +123,18 @@ class DeliveryFeeCalculatorFacadeTest {
         BigInteger deliveryDistanceInMeters = BigInteger.valueOf(500);
         BigInteger numberOfItemsInCart = BigInteger.valueOf(5);
         String orderDate = "2024-01-19T14:59:59Z";
-        DeliveryFeeCalculatorFacade deliveryFeeCalculatorFacade = new DeliveryFeeCalculatorFacade();
-        OrderData orderData = OrderData.builder()
+        DeliveryFeeCalculatorFacade deliveryFeeCalculatorFacade = new DeliveryFeeCalculatorConfiguration().deliveryFeeCalculatorFacade();
+        OrderDataDto orderDataDto = OrderDataDto.builder()
                 .cartValue(cartValueInEuroCents)
                 .deliveryDistance(deliveryDistanceInMeters)
                 .numberOfItems(numberOfItemsInCart)
                 .orderTime(orderDate)
                 .build();
         // when
-        CalculatedDeliveryFeeDto calculatedDeliveryFeeDto = deliveryFeeCalculatorFacade.calculateDeliveryFee(orderData);
+        DeliveryFeeCalculatorResponseDto deliveryFeeCalculatorResponseDto = deliveryFeeCalculatorFacade.calculateDeliveryFee(orderDataDto);
         // then
         BigInteger expectedDeliveryFee = BigInteger.valueOf(50 + 1_00);
-        assertThat(calculatedDeliveryFeeDto.calculatedDeliveryFee()).isEqualTo(expectedDeliveryFee);
+        assertThat(deliveryFeeCalculatorResponseDto.deliveryFee()).isEqualTo(expectedDeliveryFee);
     }
 
     @Test
@@ -143,18 +144,18 @@ class DeliveryFeeCalculatorFacadeTest {
         BigInteger deliveryDistanceInMeters = BigInteger.valueOf(500);
         BigInteger numberOfItemsInCart = BigInteger.valueOf(10);
         String orderDate = "2024-01-19T14:59:59Z";
-        DeliveryFeeCalculatorFacade deliveryFeeCalculatorFacade = new DeliveryFeeCalculatorFacade();
-        OrderData orderData = OrderData.builder()
+        DeliveryFeeCalculatorFacade deliveryFeeCalculatorFacade = new DeliveryFeeCalculatorConfiguration().deliveryFeeCalculatorFacade();
+        OrderDataDto orderDataDto = OrderDataDto.builder()
                 .cartValue(cartValueInEuroCents)
                 .deliveryDistance(deliveryDistanceInMeters)
                 .numberOfItems(numberOfItemsInCart)
                 .orderTime(orderDate)
                 .build();
         // when
-        CalculatedDeliveryFeeDto calculatedDeliveryFeeDto = deliveryFeeCalculatorFacade.calculateDeliveryFee(orderData);
+        DeliveryFeeCalculatorResponseDto deliveryFeeCalculatorResponseDto = deliveryFeeCalculatorFacade.calculateDeliveryFee(orderDataDto);
         // then
         BigInteger expectedDeliveryFee = BigInteger.valueOf((6 * 50) + 1_00);
-        assertThat(calculatedDeliveryFeeDto.calculatedDeliveryFee()).isEqualTo(expectedDeliveryFee);
+        assertThat(deliveryFeeCalculatorResponseDto.deliveryFee()).isEqualTo(expectedDeliveryFee);
     }
 
     @Test
@@ -164,18 +165,18 @@ class DeliveryFeeCalculatorFacadeTest {
         BigInteger deliveryDistanceInMeters = BigInteger.valueOf(500);
         BigInteger numberOfItemsInCart = BigInteger.valueOf(14);
         String orderDate = "2024-01-19T14:59:59Z";
-        DeliveryFeeCalculatorFacade deliveryFeeCalculatorFacade = new DeliveryFeeCalculatorFacade();
-        OrderData orderData = OrderData.builder()
+        DeliveryFeeCalculatorFacade deliveryFeeCalculatorFacade = new DeliveryFeeCalculatorConfiguration().deliveryFeeCalculatorFacade();
+        OrderDataDto orderDataDto = OrderDataDto.builder()
                 .cartValue(cartValueInEuroCents)
                 .deliveryDistance(deliveryDistanceInMeters)
                 .numberOfItems(numberOfItemsInCart)
                 .orderTime(orderDate)
                 .build();
         // when
-        CalculatedDeliveryFeeDto calculatedDeliveryFeeDto = deliveryFeeCalculatorFacade.calculateDeliveryFee(orderData);
+        DeliveryFeeCalculatorResponseDto deliveryFeeCalculatorResponseDto = deliveryFeeCalculatorFacade.calculateDeliveryFee(orderDataDto);
         // then
         BigInteger expectedDeliveryFee = BigInteger.valueOf((10 * 50) + 1_20 + 1_00);
-        assertThat(calculatedDeliveryFeeDto.calculatedDeliveryFee()).isEqualTo(expectedDeliveryFee);
+        assertThat(deliveryFeeCalculatorResponseDto.deliveryFee()).isEqualTo(expectedDeliveryFee);
     }
 
     @Test
@@ -185,18 +186,18 @@ class DeliveryFeeCalculatorFacadeTest {
         BigInteger deliveryDistanceInMeters = BigInteger.valueOf(500);
         BigInteger numberOfItemsInCart = BigInteger.valueOf(4);
         String orderDate = "2024-01-19T15:00:00Z";
-        DeliveryFeeCalculatorFacade deliveryFeeCalculatorFacade = new DeliveryFeeCalculatorFacade();
-        OrderData orderData = OrderData.builder()
+        DeliveryFeeCalculatorFacade deliveryFeeCalculatorFacade = new DeliveryFeeCalculatorConfiguration().deliveryFeeCalculatorFacade();
+        OrderDataDto orderDataDto = OrderDataDto.builder()
                 .cartValue(cartValueInEuroCents)
                 .deliveryDistance(deliveryDistanceInMeters)
                 .numberOfItems(numberOfItemsInCart)
                 .orderTime(orderDate)
                 .build();
         // when
-        CalculatedDeliveryFeeDto calculatedDeliveryFeeDto = deliveryFeeCalculatorFacade.calculateDeliveryFee(orderData);
+        DeliveryFeeCalculatorResponseDto deliveryFeeCalculatorResponseDto = deliveryFeeCalculatorFacade.calculateDeliveryFee(orderDataDto);
         // then
         BigInteger expectedDeliveryFee = BigDecimal.valueOf(1_00 * 1.20).toBigInteger();
-        assertThat(calculatedDeliveryFeeDto.calculatedDeliveryFee()).isEqualTo(expectedDeliveryFee);
+        assertThat(deliveryFeeCalculatorResponseDto.deliveryFee()).isEqualTo(expectedDeliveryFee);
     }
 
     @Test
@@ -206,18 +207,18 @@ class DeliveryFeeCalculatorFacadeTest {
         BigInteger deliveryDistanceInMeters = BigInteger.valueOf(500);
         BigInteger numberOfItemsInCart = BigInteger.valueOf(4);
         String orderDate = "2024-01-19T16:30:00Z";
-        DeliveryFeeCalculatorFacade deliveryFeeCalculatorFacade = new DeliveryFeeCalculatorFacade();
-        OrderData orderData = OrderData.builder()
+        DeliveryFeeCalculatorFacade deliveryFeeCalculatorFacade = new DeliveryFeeCalculatorConfiguration().deliveryFeeCalculatorFacade();
+        OrderDataDto orderDataDto = OrderDataDto.builder()
                 .cartValue(cartValueInEuroCents)
                 .deliveryDistance(deliveryDistanceInMeters)
                 .numberOfItems(numberOfItemsInCart)
                 .orderTime(orderDate)
                 .build();
         // when
-        CalculatedDeliveryFeeDto calculatedDeliveryFeeDto = deliveryFeeCalculatorFacade.calculateDeliveryFee(orderData);
+        DeliveryFeeCalculatorResponseDto deliveryFeeCalculatorResponseDto = deliveryFeeCalculatorFacade.calculateDeliveryFee(orderDataDto);
         // then
         BigInteger expectedDeliveryFee = BigDecimal.valueOf(1_00 * 1.20).toBigInteger();
-        assertThat(calculatedDeliveryFeeDto.calculatedDeliveryFee()).isEqualTo(expectedDeliveryFee);
+        assertThat(deliveryFeeCalculatorResponseDto.deliveryFee()).isEqualTo(expectedDeliveryFee);
     }
 
     @Test
@@ -227,18 +228,18 @@ class DeliveryFeeCalculatorFacadeTest {
         BigInteger deliveryDistanceInMeters = BigInteger.valueOf(500);
         BigInteger numberOfItemsInCart = BigInteger.valueOf(4);
         String orderDate = "2024-01-19T19:00:00Z";
-        DeliveryFeeCalculatorFacade deliveryFeeCalculatorFacade = new DeliveryFeeCalculatorFacade();
-        OrderData orderData = OrderData.builder()
+        DeliveryFeeCalculatorFacade deliveryFeeCalculatorFacade = new DeliveryFeeCalculatorConfiguration().deliveryFeeCalculatorFacade();
+        OrderDataDto orderDataDto = OrderDataDto.builder()
                 .cartValue(cartValueInEuroCents)
                 .deliveryDistance(deliveryDistanceInMeters)
                 .numberOfItems(numberOfItemsInCart)
                 .orderTime(orderDate)
                 .build();
         // when
-        CalculatedDeliveryFeeDto calculatedDeliveryFeeDto = deliveryFeeCalculatorFacade.calculateDeliveryFee(orderData);
+        DeliveryFeeCalculatorResponseDto deliveryFeeCalculatorResponseDto = deliveryFeeCalculatorFacade.calculateDeliveryFee(orderDataDto);
         // then
         BigInteger expectedDeliveryFee = BigDecimal.valueOf(1_00 * 1.20).toBigInteger();
-        assertThat(calculatedDeliveryFeeDto.calculatedDeliveryFee()).isEqualTo(expectedDeliveryFee);
+        assertThat(deliveryFeeCalculatorResponseDto.deliveryFee()).isEqualTo(expectedDeliveryFee);
     }
 
     @Test
@@ -248,18 +249,18 @@ class DeliveryFeeCalculatorFacadeTest {
         BigInteger deliveryDistanceInMeters = BigInteger.valueOf(5000);
         BigInteger numberOfItemsInCart = BigInteger.valueOf(20);
         String orderDate = "2024-01-19T13:00:00Z";
-        DeliveryFeeCalculatorFacade deliveryFeeCalculatorFacade = new DeliveryFeeCalculatorFacade();
-        OrderData orderData = OrderData.builder()
+        DeliveryFeeCalculatorFacade deliveryFeeCalculatorFacade = new DeliveryFeeCalculatorConfiguration().deliveryFeeCalculatorFacade();
+        OrderDataDto orderDataDto = OrderDataDto.builder()
                 .cartValue(cartValueInEuroCents)
                 .deliveryDistance(deliveryDistanceInMeters)
                 .numberOfItems(numberOfItemsInCart)
                 .orderTime(orderDate)
                 .build();
         // when
-        CalculatedDeliveryFeeDto calculatedDeliveryFeeDto = deliveryFeeCalculatorFacade.calculateDeliveryFee(orderData);
+        DeliveryFeeCalculatorResponseDto deliveryFeeCalculatorResponseDto = deliveryFeeCalculatorFacade.calculateDeliveryFee(orderDataDto);
         // then
         BigInteger expectedDeliveryFee = BigInteger.valueOf(15_00);
-        assertThat(calculatedDeliveryFeeDto.calculatedDeliveryFee()).isEqualTo(expectedDeliveryFee);
+        assertThat(deliveryFeeCalculatorResponseDto.deliveryFee()).isEqualTo(expectedDeliveryFee);
     }
 
     @Test
@@ -269,18 +270,18 @@ class DeliveryFeeCalculatorFacadeTest {
         BigInteger deliveryDistanceInMeters = BigInteger.valueOf(500);
         BigInteger numberOfItemsInCart = BigInteger.valueOf(10);
         String orderDate = "2024-01-19T13:00:00Z";
-        DeliveryFeeCalculatorFacade deliveryFeeCalculatorFacade = new DeliveryFeeCalculatorFacade();
-        OrderData orderData = OrderData.builder()
+        DeliveryFeeCalculatorFacade deliveryFeeCalculatorFacade = new DeliveryFeeCalculatorConfiguration().deliveryFeeCalculatorFacade();
+        OrderDataDto orderDataDto = OrderDataDto.builder()
                 .cartValue(cartValueInEuroCents)
                 .deliveryDistance(deliveryDistanceInMeters)
                 .numberOfItems(numberOfItemsInCart)
                 .orderTime(orderDate)
                 .build();
         // when
-        CalculatedDeliveryFeeDto calculatedDeliveryFeeDto = deliveryFeeCalculatorFacade.calculateDeliveryFee(orderData);
+        DeliveryFeeCalculatorResponseDto deliveryFeeCalculatorResponseDto = deliveryFeeCalculatorFacade.calculateDeliveryFee(orderDataDto);
         // then
         BigInteger expectedDeliveryFee = BigInteger.ZERO;
-        assertThat(calculatedDeliveryFeeDto.calculatedDeliveryFee()).isEqualTo(expectedDeliveryFee);
+        assertThat(deliveryFeeCalculatorResponseDto.deliveryFee()).isEqualTo(expectedDeliveryFee);
     }
 
     @Test
@@ -290,18 +291,18 @@ class DeliveryFeeCalculatorFacadeTest {
         BigInteger deliveryDistanceInMeters = BigInteger.valueOf(500);
         BigInteger numberOfItemsInCart = BigInteger.valueOf(10);
         String orderDate = "2024-01-19T13:00:00Z";
-        DeliveryFeeCalculatorFacade deliveryFeeCalculatorFacade = new DeliveryFeeCalculatorFacade();
-        OrderData orderData = OrderData.builder()
+        DeliveryFeeCalculatorFacade deliveryFeeCalculatorFacade = new DeliveryFeeCalculatorConfiguration().deliveryFeeCalculatorFacade();
+        OrderDataDto orderDataDto = OrderDataDto.builder()
                 .cartValue(cartValueInEuroCents)
                 .deliveryDistance(deliveryDistanceInMeters)
                 .numberOfItems(numberOfItemsInCart)
                 .orderTime(orderDate)
                 .build();
         // when
-        CalculatedDeliveryFeeDto calculatedDeliveryFeeDto = deliveryFeeCalculatorFacade.calculateDeliveryFee(orderData);
+        DeliveryFeeCalculatorResponseDto deliveryFeeCalculatorResponseDto = deliveryFeeCalculatorFacade.calculateDeliveryFee(orderDataDto);
         // then
         BigInteger expectedDeliveryFee = BigInteger.ZERO;
-        assertThat(calculatedDeliveryFeeDto.calculatedDeliveryFee()).isEqualTo(expectedDeliveryFee);
+        assertThat(deliveryFeeCalculatorResponseDto.deliveryFee()).isEqualTo(expectedDeliveryFee);
     }
 
 }

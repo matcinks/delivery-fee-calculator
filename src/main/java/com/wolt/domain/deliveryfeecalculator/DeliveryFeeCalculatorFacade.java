@@ -1,26 +1,36 @@
 package com.wolt.domain.deliveryfeecalculator;
 
-import com.wolt.domain.deliveryfeecalculator.dto.CalculatedDeliveryFeeDto;
+import com.wolt.domain.deliveryfeecalculator.dto.DeliveryFeeCalculatorResponseDto;
+import com.wolt.domain.deliveryfeecalculator.dto.OrderDataDto;
+import lombok.AllArgsConstructor;
 
 import java.math.BigInteger;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
+@AllArgsConstructor
 public class DeliveryFeeCalculatorFacade {
 
     private static final BigInteger FREE_DELIVERY_LIMIT = BigInteger.valueOf(200_00);
     private static final BigInteger NO_DELIVERY_FEE = BigInteger.ZERO;
-    private final CartCapacityCalculator cartCapacityCalculator = new CartCapacityCalculator();
-    private final CartTotalCalculator cartTotalCalculator = new CartTotalCalculator();
-    private final DeliveryDistanceCalculator deliveryDistanceCalculator = new DeliveryDistanceCalculator();
-    private final RushHoursValidator rushHoursValidator = new RushHoursValidator();
-    private final FinalFeeValidator finalFeeValidator = new FinalFeeValidator();
+    private final CartCapacityCalculator cartCapacityCalculator;
+    private final CartTotalCalculator cartTotalCalculator;
+    private final DeliveryDistanceCalculator deliveryDistanceCalculator;
+    private final RushHoursValidator rushHoursValidator;
+    private final FinalFeeValidator finalFeeValidator;
 
-    public CalculatedDeliveryFeeDto calculateDeliveryFee(OrderData orderData) {
+    public DeliveryFeeCalculatorResponseDto calculateDeliveryFee(OrderDataDto orderDataDto) {
+        OrderData orderData = OrderData.builder()
+                .cartValue(orderDataDto.cartValue())
+                .deliveryDistance(orderDataDto.deliveryDistance())
+                .numberOfItems(orderDataDto.numberOfItems())
+                .orderTime(orderDataDto.orderTime())
+                .build();
+
         BigInteger cartValue = orderData.cartValue();
         if (isCartTotalGreaterOrEqualFreeDeliveryLimit(cartValue)) {
-            return CalculatedDeliveryFeeDto.builder()
-                    .calculatedDeliveryFee(NO_DELIVERY_FEE)
+            return DeliveryFeeCalculatorResponseDto.builder()
+                    .deliveryFee(NO_DELIVERY_FEE)
                     .build();
         }
         BigInteger deliveryDistance = orderData.deliveryDistance();
@@ -31,8 +41,8 @@ public class DeliveryFeeCalculatorFacade {
         deliveryFee = rushHoursValidator.calculate(orderDate, deliveryFee);
         deliveryFee = finalFeeValidator.validate(deliveryFee);
 
-        return CalculatedDeliveryFeeDto.builder()
-                .calculatedDeliveryFee(deliveryFee)
+        return DeliveryFeeCalculatorResponseDto.builder()
+                .deliveryFee(deliveryFee)
                 .build();
     }
 

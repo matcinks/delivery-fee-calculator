@@ -5,5 +5,5 @@ import lombok.Builder;
 import java.math.BigInteger;
 
 @Builder
-public record CalculatedDeliveryFeeDto(BigInteger calculatedDeliveryFee) {
+public record DeliveryFeeCalculatorResponseDto(BigInteger deliveryFee) {
 }
