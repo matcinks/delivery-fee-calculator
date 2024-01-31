@@ -1,18 +1,15 @@
-package com.wolt.infrastructure.deliveryfeecalculator.controller;
+package com.wolt.infrastructure.deliveryfeecalculator.controller
 
-import com.wolt.domain.deliveryfeecalculator.dto.OrderDataDto;
+import com.wolt.domain.deliveryfeecalculator.dto.OrderDataDto
+import java.math.BigInteger
 
-import java.math.BigInteger;
-
-public class OrderDataRequestDtoMapper {
-
-    static OrderDataDto mapFromOrderDataRequestDto(OrderDataRequestDto requestDto){
+object OrderDataRequestDtoMapper {
+    fun mapFromOrderDataRequestDto(requestDto: OrderDataRequestDto?): OrderDataDto {
         return OrderDataDto.builder()
-                .cartValue(BigInteger.valueOf(requestDto.cartValue()))
-                .deliveryDistance(BigInteger.valueOf(requestDto.deliveryDistance()))
-                .numberOfItems(BigInteger.valueOf(requestDto.numberOfItems()))
-                .orderTime(requestDto.time())
-                .build();
+                .cartValue(BigInteger.valueOf(requestDto!!.cartValue!!.toLong()))
+                .deliveryDistance(BigInteger.valueOf(requestDto.deliveryDistance!!.toLong()))
+                .numberOfItems(BigInteger.valueOf(requestDto.numberOfItems!!.toLong()))
+                .orderTime(requestDto.time)
+                .build()
     }
-
 }

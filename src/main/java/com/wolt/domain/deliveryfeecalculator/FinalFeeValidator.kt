@@ -1,18 +1,19 @@
-package com.wolt.domain.deliveryfeecalculator;
+package com.wolt.domain.deliveryfeecalculator
 
-import java.math.BigInteger;
+import java.math.BigInteger
 
-class FinalFeeValidator {
-    private static final BigInteger MAX_DELIVERY_FEE = BigInteger.valueOf(15_00);
-
-    BigInteger validate(BigInteger deliveryFee) {
-        if (isDeliveryFeeMoreThanMax(deliveryFee)) {
-            return MAX_DELIVERY_FEE;
-        }
-        return deliveryFee;
+internal class FinalFeeValidator {
+    fun validate(deliveryFee: BigInteger?): BigInteger? {
+        return if (isDeliveryFeeMoreThanMax(deliveryFee)) {
+            MAX_DELIVERY_FEE
+        } else deliveryFee
     }
 
-    private boolean isDeliveryFeeMoreThanMax(BigInteger deliveryFee) {
-        return deliveryFee.compareTo(MAX_DELIVERY_FEE) > 0;
+    private fun isDeliveryFeeMoreThanMax(deliveryFee: BigInteger?): Boolean {
+        return deliveryFee!!.compareTo(MAX_DELIVERY_FEE) > 0
+    }
+
+    companion object {
+        private val MAX_DELIVERY_FEE = BigInteger.valueOf(1500)
     }
 }

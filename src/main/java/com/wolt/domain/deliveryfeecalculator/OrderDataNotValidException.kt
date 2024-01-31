@@ -1,8 +1,3 @@
-package com.wolt.domain.deliveryfeecalculator;
+package com.wolt.domain.deliveryfeecalculator
 
-public class OrderDataNotValidException extends RuntimeException {
-
-    OrderDataNotValidException(String message) {
-        super(message);
-    }
-}
+class OrderDataNotValidException internal constructor(message: String?) : RuntimeException(message)

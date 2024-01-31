@@ -1,28 +1,27 @@
-package com.wolt.domain.deliveryfeecalculator;
+package com.wolt.domain.deliveryfeecalculator
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
 
 @Configuration
-public class DeliveryFeeCalculatorConfiguration {
-
+open class DeliveryFeeCalculatorConfiguration {
     @Bean
-    DeliveryFeeCalculatorFacade deliveryFeeCalculatorFacade() {
-        FreeDeliveryCalculator freeDeliveryCalculator = new FreeDeliveryCalculator();
-        TotalDeliveryFeeCalculator deliveryFeeCalculator = totalDeliveryFeeCalculator();
-        return new DeliveryFeeCalculatorFacade(freeDeliveryCalculator, deliveryFeeCalculator);
+    fun deliveryFeeCalculatorFacade(): DeliveryFeeCalculatorFacade {
+        val freeDeliveryCalculator = FreeDeliveryCalculator()
+        val deliveryFeeCalculator = totalDeliveryFeeCalculator()
+        return DeliveryFeeCalculatorFacade(freeDeliveryCalculator, deliveryFeeCalculator)
     }
 
-    private TotalDeliveryFeeCalculator totalDeliveryFeeCalculator() {
-        CartTotalCalculator cartTotalCalculator = new CartTotalCalculator();
-        DeliveryDistanceCalculator deliveryDistanceCalculator = new DeliveryDistanceCalculator();
-        CartCapacityCalculator cartCapacityCalculator = new CartCapacityCalculator();
-        RushHoursCalculator rushHoursCalculator = new RushHoursCalculator();
-        FinalFeeValidator finalFeeValidator = new FinalFeeValidator();
-        return new TotalDeliveryFeeCalculator(cartTotalCalculator,
+    private fun totalDeliveryFeeCalculator(): TotalDeliveryFeeCalculator {
+        val cartTotalCalculator = CartTotalCalculator()
+        val deliveryDistanceCalculator = DeliveryDistanceCalculator()
+        val cartCapacityCalculator = CartCapacityCalculator()
+        val rushHoursCalculator = RushHoursCalculator()
+        val finalFeeValidator = FinalFeeValidator()
+        return TotalDeliveryFeeCalculator(cartTotalCalculator,
                 deliveryDistanceCalculator,
                 cartCapacityCalculator,
                 rushHoursCalculator,
-                finalFeeValidator);
+                finalFeeValidator)
     }
 }

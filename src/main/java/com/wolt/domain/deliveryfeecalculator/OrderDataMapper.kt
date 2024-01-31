@@ -1,15 +1,14 @@
-package com.wolt.domain.deliveryfeecalculator;
+package com.wolt.domain.deliveryfeecalculator
 
-import com.wolt.domain.deliveryfeecalculator.dto.OrderDataDto;
+import com.wolt.domain.deliveryfeecalculator.dto.OrderDataDto
 
-public class OrderDataMapper {
-
-    static OrderData mapFromOrderDataDto(OrderDataDto orderDataDto) {
+object OrderDataMapper {
+    fun mapFromOrderDataDto(orderDataDto: OrderDataDto?): OrderData {
         return OrderData.builder()
-                .cartValue(orderDataDto.cartValue())
-                .deliveryDistance(orderDataDto.deliveryDistance())
-                .numberOfItems(orderDataDto.numberOfItems())
-                .orderTime(orderDataDto.orderTime())
-                .build();
+                .cartValue(orderDataDto!!.cartValue)
+                .deliveryDistance(orderDataDto.deliveryDistance)
+                .numberOfItems(orderDataDto.numberOfItems)
+                .orderTime(orderDataDto.orderTime)
+                .build()
     }
 }

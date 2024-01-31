@@ -1,26 +1,20 @@
-package com.wolt.feature;
+package com.wolt.feature
 
-import com.wolt.BaseIntegrationTest;
-import com.wolt.domain.deliveryfeecalculator.dto.DeliveryFeeCalculatorResponseDto;
-import org.junit.jupiter.api.Test;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.ResultActions;
+import com.wolt.BaseIntegrationTest
+import com.wolt.domain.deliveryfeecalculator.dto.DeliveryFeeCalculatorResponseDto
+import org.junit.jupiter.api.Test
+import org.springframework.http.MediaType
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers
+import java.math.BigInteger
 
-import java.math.BigInteger;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import static org.assertj.core.api.Assertions.assertThat;
-
-public class DeliveryFeeIntegrationTest extends BaseIntegrationTest {
-
+class DeliveryFeeIntegrationTest : BaseIntegrationTest() {
     @Test
-    void should_calculate_delivery_fee() throws Exception {
+    @Throws(Exception::class)
+    fun should_calculate_delivery_fee() {
         // given
         // when
-        ResultActions perform = mockMvc.perform(post("/deliveryFee")
+        val perform = mockMvc!!.perform(MockMvcRequestBuilders.post("/deliveryFee")
                 .content("""
                         {
                         "cart_value": 790,
@@ -28,14 +22,15 @@ public class DeliveryFeeIntegrationTest extends BaseIntegrationTest {
                         "number_of_items": 4,
                         "time": "2024-01-15T13:00:00Z"
                         }
-                        """.trim()
+                        
+                        """.trimIndent().trim { it <= ' ' }
                 ).contentType(MediaType.APPLICATION_JSON)
-        );
+        )
         // then
-        MvcResult mvcResult = perform.andExpect(status().isOk()).andReturn();
-        String json = mvcResult.getResponse().getContentAsString();
-        DeliveryFeeCalculatorResponseDto deliveryFeeCalculatorResponseDto = objectMapper.readValue(json, DeliveryFeeCalculatorResponseDto.class);
-        BigInteger expectedDeliveryFee = BigInteger.valueOf(710);
-        assertThat(deliveryFeeCalculatorResponseDto.deliveryFee()).isEqualTo(expectedDeliveryFee);
+        val mvcResult = perform.andExpect(MockMvcResultMatchers.status().isOk).andReturn()
+        val json = mvcResult.response.contentAsString
+        val deliveryFeeCalculatorResponseDto = objectMapper!!.readValue(json, DeliveryFeeCalculatorResponseDto::class.java)
+        val expectedDeliveryFee = BigInteger.valueOf(710)
+        assertThat(deliveryFeeCalculatorResponseDto.deliveryFee()).isEqualTo(expectedDeliveryFee)
     }
 }

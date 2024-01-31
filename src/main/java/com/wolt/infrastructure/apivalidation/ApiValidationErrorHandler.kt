@@ -1,33 +1,26 @@
-package com.wolt.infrastructure.apivalidation;
+package com.wolt.infrastructure.apivalidation
 
-import org.springframework.context.support.DefaultMessageSourceResolvable;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
-
-import java.util.List;
-import java.util.stream.Collectors;
+import org.springframework.http.HttpStatus
+import org.springframework.validation.ObjectError
+import org.springframework.web.bind.MethodArgumentNotValidException
+import org.springframework.web.bind.annotation.*
+import java.util.stream.Collectors
 
 @ControllerAdvice
-public class ApiValidationErrorHandler {
-
+class ApiValidationErrorHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ExceptionHandler(MethodArgumentNotValidException::class)
     @ResponseBody
-    public ApiValidationErrorDto handleValidationExceptions(MethodArgumentNotValidException exception){
-        final List<String> errors = getErrorsFromException(exception);
-        return new ApiValidationErrorDto(errors, HttpStatus.BAD_REQUEST);
+    fun handleValidationExceptions(exception: MethodArgumentNotValidException): ApiValidationErrorDto {
+        val errors = getErrorsFromException(exception)
+        return ApiValidationErrorDto(errors, HttpStatus.BAD_REQUEST)
     }
 
-    private List<String> getErrorsFromException(MethodArgumentNotValidException exception) {
-        return exception.getBindingResult()
-                .getAllErrors()
+    private fun getErrorsFromException(exception: MethodArgumentNotValidException): List<String> {
+        return exception.bindingResult
+                .allErrors
                 .stream()
-                .map(DefaultMessageSourceResolvable::getDefaultMessage)
-                .collect(Collectors.toList());
+                .map { obj: ObjectError -> obj.defaultMessage }
+                .collect(Collectors.toList())
     }
-
 }

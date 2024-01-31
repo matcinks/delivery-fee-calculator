@@ -1,28 +1,25 @@
-package com.wolt.domain.deliveryfeecalculator;
+package com.wolt.domain.deliveryfeecalculator
 
-import com.wolt.domain.deliveryfeecalculator.dto.DeliveryFeeCalculatorResponseDto;
-import com.wolt.domain.deliveryfeecalculator.dto.OrderDataDto;
-import lombok.AllArgsConstructor;
-
-import java.math.BigInteger;
+import com.wolt.domain.deliveryfeecalculator.dto.DeliveryFeeCalculatorResponseDto
+import com.wolt.domain.deliveryfeecalculator.dto.OrderDataDto
+import lombok.AllArgsConstructor
+import java.math.BigInteger
 
 @AllArgsConstructor
-public class DeliveryFeeCalculatorFacade {
+class DeliveryFeeCalculatorFacade {
+    private val freeDeliveryCalculator: FreeDeliveryCalculator? = null
+    private val deliveryFeeCalculator: TotalDeliveryFeeCalculator? = null
+    fun calculateDeliveryFee(orderDataDto: OrderDataDto?): DeliveryFeeCalculatorResponseDto {
+        OrderDataDtoValidator.validate(orderDataDto)
+        val orderData = OrderDataMapper.mapFromOrderDataDto(orderDataDto)
+        return if (freeDeliveryCalculator!!.isDeliveryFree(orderData!!.cartValue)) {
+            DeliveryFeeCalculatorResponseDto(deliveryFee = NO_DELIVERY_FEE)
+        } else DeliveryFeeCalculatorResponseDto.builder()
+                .deliveryFee(deliveryFeeCalculator!!.calculateTotal(orderData))
+                .build()
+    }
 
-    private static final BigInteger NO_DELIVERY_FEE = BigInteger.ZERO;
-    private final FreeDeliveryCalculator freeDeliveryCalculator;
-    private final TotalDeliveryFeeCalculator deliveryFeeCalculator;
-
-    public DeliveryFeeCalculatorResponseDto calculateDeliveryFee(OrderDataDto orderDataDto) {
-        OrderDataDtoValidator.validate(orderDataDto);
-        OrderData orderData = OrderDataMapper.mapFromOrderDataDto(orderDataDto);
-        if (freeDeliveryCalculator.isDeliveryFree(orderData.cartValue())) {
-            return DeliveryFeeCalculatorResponseDto.builder()
-                    .deliveryFee(NO_DELIVERY_FEE)
-                    .build();
-        }
-        return DeliveryFeeCalculatorResponseDto.builder()
-                .deliveryFee(deliveryFeeCalculator.calculateTotal(orderData))
-                .build();
+    companion object {
+        private val NO_DELIVERY_FEE = BigInteger.ZERO
     }
 }

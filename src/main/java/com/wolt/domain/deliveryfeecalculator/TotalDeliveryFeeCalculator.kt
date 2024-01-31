@@ -1,30 +1,27 @@
-package com.wolt.domain.deliveryfeecalculator;
+package com.wolt.domain.deliveryfeecalculator
 
-import lombok.AllArgsConstructor;
-
-import java.math.BigInteger;
+import lombok.AllArgsConstructor
+import java.math.BigInteger
 
 @AllArgsConstructor
-class TotalDeliveryFeeCalculator {
-
-    private final CartTotalCalculator cartTotalCalculator;
-    private final DeliveryDistanceCalculator deliveryDistanceCalculator;
-    private final CartCapacityCalculator cartCapacityCalculator;
-    private final RushHoursCalculator rushHoursCalculator;
-    private final FinalFeeValidator finalFeeValidator;
-
-    BigInteger calculateTotal(OrderData orderData) {
+internal class TotalDeliveryFeeCalculator {
+    private val cartTotalCalculator: CartTotalCalculator? = null
+    private val deliveryDistanceCalculator: DeliveryDistanceCalculator? = null
+    private val cartCapacityCalculator: CartCapacityCalculator? = null
+    private val rushHoursCalculator: RushHoursCalculator? = null
+    private val finalFeeValidator: FinalFeeValidator? = null
+    fun calculateTotal(orderData: OrderData?): BigInteger? {
         return finalFeeValidator
                 .validate(rushHoursCalculator
-                        .calculate(orderData.orderTime(),
-                                calculateBaseDelivery(orderData.cartValue(),
-                                        orderData.deliveryDistance(),
-                                        orderData.numberOfItems())));
+                        .calculate(orderData!!.orderTime,
+                                calculateBaseDelivery(orderData.cartValue,
+                                        orderData.deliveryDistance,
+                                        orderData.numberOfItems)))
     }
 
-    private BigInteger calculateBaseDelivery(BigInteger cartValue, BigInteger deliveryDistance, BigInteger numberOfItems) {
-        return cartTotalCalculator.calculate(cartValue)
-                .add(deliveryDistanceCalculator.calculate(deliveryDistance))
-                .add(cartCapacityCalculator.calculate(numberOfItems));
+    private fun calculateBaseDelivery(cartValue: BigInteger, deliveryDistance: BigInteger, numberOfItems: BigInteger): BigInteger {
+        return cartTotalCalculator!!.calculate(cartValue)
+                .add(deliveryDistanceCalculator!!.calculate(deliveryDistance))
+                .add(cartCapacityCalculator!!.calculate(numberOfItems))
     }
 }

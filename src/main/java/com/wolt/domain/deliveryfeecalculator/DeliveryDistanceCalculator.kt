@@ -1,29 +1,30 @@
-package com.wolt.domain.deliveryfeecalculator;
+package com.wolt.domain.deliveryfeecalculator
 
-import java.math.BigInteger;
+import java.math.BigInteger
 
-class DeliveryDistanceCalculator {
-    private final static BigInteger BASE_DISTANCE = BigInteger.valueOf(500);
-    private final static BigInteger BASE_FEE_PER_500_METERS = BigInteger.valueOf(1_00);
-
-    BigInteger calculate(BigInteger deliveryDistance) {
+internal class DeliveryDistanceCalculator {
+    fun calculate(deliveryDistance: BigInteger): BigInteger {
         if (isBaseDistance(deliveryDistance)) {
-            return BASE_FEE_PER_500_METERS;
+            return BASE_FEE_PER_500_METERS
         }
-        BigInteger deliveryFee = deliveryDistance.divide(BASE_DISTANCE)
-                .multiply(BASE_FEE_PER_500_METERS);
-        if (isTotalDistanceIncluded(deliveryDistance)) {
-            return deliveryFee;
-        }
-        return deliveryFee.add(BASE_FEE_PER_500_METERS);
+        val deliveryFee = deliveryDistance.divide(BASE_DISTANCE)
+                .multiply(BASE_FEE_PER_500_METERS)
+        return if (isTotalDistanceIncluded(deliveryDistance)) {
+            deliveryFee
+        } else deliveryFee.add(BASE_FEE_PER_500_METERS)
     }
 
-    private boolean isBaseDistance(BigInteger deliveryDistance) {
-        return deliveryDistance.compareTo(BASE_DISTANCE) <= 0;
+    private fun isBaseDistance(deliveryDistance: BigInteger): Boolean {
+        return deliveryDistance.compareTo(BASE_DISTANCE) <= 0
     }
 
-    private boolean isTotalDistanceIncluded(BigInteger deliveryDistance) {
+    private fun isTotalDistanceIncluded(deliveryDistance: BigInteger): Boolean {
         return deliveryDistance.remainder(BASE_FEE_PER_500_METERS)
-                .compareTo(BigInteger.ZERO) <= 0;
+                .compareTo(BigInteger.ZERO) <= 0
+    }
+
+    companion object {
+        private val BASE_DISTANCE = BigInteger.valueOf(500)
+        private val BASE_FEE_PER_500_METERS = BigInteger.valueOf(100)
     }
 }

@@ -1,9 +1,6 @@
-package com.wolt.domain.deliveryfeecalculator.dto;
+package com.wolt.domain.deliveryfeecalculator.dto
 
-import lombok.Builder;
+import java.math.BigInteger
 
-import java.math.BigInteger;
-
-@Builder
-public record DeliveryFeeCalculatorResponseDto(BigInteger deliveryFee) {
-}
+class DeliveryFeeCalculatorResponseDto(deliveryFee: BigInteger) {
+    val deliveryFee: BigInteger

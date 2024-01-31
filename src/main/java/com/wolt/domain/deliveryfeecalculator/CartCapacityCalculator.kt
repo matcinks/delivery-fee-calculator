@@ -1,31 +1,31 @@
-package com.wolt.domain.deliveryfeecalculator;
+package com.wolt.domain.deliveryfeecalculator
 
-import java.math.BigInteger;
+import java.math.BigInteger
 
-class CartCapacityCalculator {
-
-    private final static BigInteger MAX_NUMBER_OF_ITEMS_WITHOUT_FEE = BigInteger.valueOf(4);
-    private final static BigInteger MAX_NUMBER_OF_ITEMS_WITHOUT_BULK_FEE = BigInteger.valueOf(12);
-    private final static BigInteger BASE_SURCHARGE = BigInteger.valueOf(50);
-    private final static BigInteger BULK_FEE = BigInteger.valueOf(1_20);
-
-    BigInteger calculate(BigInteger numberOfItems) {
+internal class CartCapacityCalculator {
+    fun calculate(numberOfItems: BigInteger): BigInteger {
         if (!isAmountOfItemsGreaterThanFour(numberOfItems)) {
-            return BigInteger.ZERO;
+            return BigInteger.ZERO
         }
-        BigInteger deliveryFee = numberOfItems.subtract(MAX_NUMBER_OF_ITEMS_WITHOUT_FEE)
-                .multiply(BASE_SURCHARGE);
-        if (isAmountOfItemsGreaterThanTwelve(numberOfItems)) {
-            return deliveryFee.add(BULK_FEE);
-        }
-        return deliveryFee;
+        val deliveryFee = numberOfItems.subtract(MAX_NUMBER_OF_ITEMS_WITHOUT_FEE)
+                .multiply(BASE_SURCHARGE)
+        return if (isAmountOfItemsGreaterThanTwelve(numberOfItems)) {
+            deliveryFee.add(BULK_FEE)
+        } else deliveryFee
     }
 
-    private boolean isAmountOfItemsGreaterThanFour(BigInteger numberOfItems) {
-        return numberOfItems.compareTo(MAX_NUMBER_OF_ITEMS_WITHOUT_FEE) > 0;
+    private fun isAmountOfItemsGreaterThanFour(numberOfItems: BigInteger): Boolean {
+        return numberOfItems.compareTo(MAX_NUMBER_OF_ITEMS_WITHOUT_FEE) > 0
     }
 
-    private boolean isAmountOfItemsGreaterThanTwelve(BigInteger numberOfItems) {
-        return numberOfItems.compareTo(MAX_NUMBER_OF_ITEMS_WITHOUT_BULK_FEE) > 0;
+    private fun isAmountOfItemsGreaterThanTwelve(numberOfItems: BigInteger): Boolean {
+        return numberOfItems.compareTo(MAX_NUMBER_OF_ITEMS_WITHOUT_BULK_FEE) > 0
+    }
+
+    companion object {
+        private val MAX_NUMBER_OF_ITEMS_WITHOUT_FEE = BigInteger.valueOf(4)
+        private val MAX_NUMBER_OF_ITEMS_WITHOUT_BULK_FEE = BigInteger.valueOf(12)
+        private val BASE_SURCHARGE = BigInteger.valueOf(50)
+        private val BULK_FEE = BigInteger.valueOf(120)
     }
 }

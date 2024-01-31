@@ -1,46 +1,44 @@
-package com.wolt.apivalidationerror;
+package com.wolt.apivalidationerror
 
-import com.wolt.BaseIntegrationTest;
-import com.wolt.infrastructure.apivalidation.ApiValidationErrorDto;
-import org.junit.jupiter.api.Test;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.ResultActions;
+import com.wolt.BaseIntegrationTest
+import com.wolt.infrastructure.apivalidation.ApiValidationErrorDto
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Test
+import org.springframework.http.MediaType
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import static org.assertj.core.api.Assertions.assertThat;
-
-public class ApiValidationFailedIntegrationTest extends BaseIntegrationTest {
-
+class ApiValidationFailedIntegrationTest : BaseIntegrationTest() {
     @Test
-    void should_return_400_bad_request_and_validation_message_when_request_is_empty() throws Exception {
+    @Throws(Exception::class)
+    fun should_return_400_bad_request_and_validation_message_when_request_is_empty() {
         // given
         // when
-        ResultActions perform = mockMvc.perform(post("/deliveryFee")
+        val perform = mockMvc!!.perform(MockMvcRequestBuilders.post("/deliveryFee")
                 .content("""
                         {}
-                        """.trim()
+                        
+                        """.trimIndent().trim { it <= ' ' }
                 ).contentType(MediaType.APPLICATION_JSON)
-        );
+        )
         // then
-        MvcResult mvcResult = perform.andExpect(status().isBadRequest()).andReturn();
-        String json = mvcResult.getResponse().getContentAsString();
-        ApiValidationErrorDto result = objectMapper.readValue(json, ApiValidationErrorDto.class);
+        val mvcResult = perform.andExpect(MockMvcResultMatchers.status().isBadRequest).andReturn()
+        val json = mvcResult.response.contentAsString
+        val result = objectMapper!!.readValue(json, ApiValidationErrorDto::class.java)
         assertThat(result.messages()).containsExactlyInAnyOrder(
                 "cart value must be not null",
                 "delivery distance must be not null",
                 "number of items must be not null",
                 "order time must be not null"
-        );
+        )
     }
 
     @Test
-    void should_return_400_bad_request_and_validation_message_when_values_in_request_are_not_positive_numbers() throws Exception {
+    @Throws(Exception::class)
+    fun should_return_400_bad_request_and_validation_message_when_values_in_request_are_not_positive_numbers() {
         // given
         // when
-        ResultActions perform = mockMvc.perform(post("/deliveryFee")
+        val perform = mockMvc!!.perform(MockMvcRequestBuilders.post("/deliveryFee")
                 .content("""
                         {
                             "cart_value": -20,
@@ -48,17 +46,18 @@ public class ApiValidationFailedIntegrationTest extends BaseIntegrationTest {
                             "number_of_items": -1,
                             "time": "2024-01-15T13:00:00Z"
                         }
-                        """.trim()
+                        
+                        """.trimIndent().trim { it <= ' ' }
                 ).contentType(MediaType.APPLICATION_JSON)
-        );
+        )
         // then
-        MvcResult mvcResult = perform.andExpect(status().isBadRequest()).andReturn();
-        String json = mvcResult.getResponse().getContentAsString();
-        ApiValidationErrorDto result = objectMapper.readValue(json, ApiValidationErrorDto.class);
+        val mvcResult = perform.andExpect(MockMvcResultMatchers.status().isBadRequest).andReturn()
+        val json = mvcResult.response.contentAsString
+        val result = objectMapper!!.readValue(json, ApiValidationErrorDto::class.java)
         assertThat(result.messages()).containsExactlyInAnyOrder(
                 "cart value must be positive number",
                 "number of items must be positive number",
                 "delivery distance must be positive number"
-        );
+        )
     }
 }
