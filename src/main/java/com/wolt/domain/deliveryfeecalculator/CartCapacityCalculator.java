@@ -11,7 +11,7 @@ class CartCapacityCalculator {
 
     BigInteger calculate(BigInteger numberOfItems) {
         BigInteger deliveryFee = BigInteger.ZERO;
-        if (isAmountOfItemsGreaterThanFour(numberOfItems)){
+        if (isAmountOfItemsGreaterThanFour(numberOfItems)) {
             deliveryFee = numberOfItems.subtract(MAX_NUMBER_OF_ITEMS_WITHOUT_FEE)
                     .multiply(BASE_SURCHARGE);
         }
@@ -20,9 +20,11 @@ class CartCapacityCalculator {
         }
         return deliveryFee;
     }
-    private boolean isAmountOfItemsGreaterThanFour(BigInteger numberOfItems){
+
+    private boolean isAmountOfItemsGreaterThanFour(BigInteger numberOfItems) {
         return numberOfItems.compareTo(MAX_NUMBER_OF_ITEMS_WITHOUT_FEE) > 0;
     }
+
     private boolean isAmountOfItemsGreaterThanTwelve(BigInteger numberOfItems) {
         return numberOfItems.compareTo(MAX_NUMBER_OF_ITEMS_WITHOUT_BULK_FEE) > 0;
     }

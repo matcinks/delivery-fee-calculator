@@ -2,6 +2,7 @@ package com.wolt.domain.deliveryfeecalculator;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.time.ZonedDateTime;
@@ -14,11 +15,12 @@ class RushHoursValidator {
     private static final BigDecimal INCREASE_RATE = BigDecimal.valueOf(1.2);
 
     BigInteger calculate(ZonedDateTime orderDate, BigInteger deliveryFee) {
-        if (areRushHours(orderDate)) {
-            BigDecimal increasedFee = new BigDecimal(deliveryFee).multiply(INCREASE_RATE);
-            deliveryFee = increasedFee.toBigInteger();
+        if (!areRushHours(orderDate)) {
+            return deliveryFee;
         }
-        return deliveryFee;
+        BigDecimal increasedFee = new BigDecimal(deliveryFee).multiply(INCREASE_RATE)
+                .setScale(0, RoundingMode.DOWN);
+        return increasedFee.toBigInteger();
     }
 
     private boolean areRushHours(ZonedDateTime orderDate) {

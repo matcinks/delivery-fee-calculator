@@ -7,7 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
-@SpringBootTest(classes = {DeliveryFeeCalculatorApp.class, IntegrationConfiguration.class})
+@SpringBootTest(classes = {DeliveryFeeCalculatorApp.class})
 @ActiveProfiles("integration")
 @AutoConfigureMockMvc
 public class BaseIntegrationTest {

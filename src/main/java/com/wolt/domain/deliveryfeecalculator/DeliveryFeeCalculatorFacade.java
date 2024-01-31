@@ -5,8 +5,6 @@ import com.wolt.domain.deliveryfeecalculator.dto.OrderDataDto;
 import lombok.AllArgsConstructor;
 
 import java.math.BigInteger;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 
 @AllArgsConstructor
 public class DeliveryFeeCalculatorFacade {
@@ -20,34 +18,43 @@ public class DeliveryFeeCalculatorFacade {
     private final FinalFeeValidator finalFeeValidator;
 
     public DeliveryFeeCalculatorResponseDto calculateDeliveryFee(OrderDataDto orderDataDto) {
-        OrderData orderData = OrderData.builder()
-                .cartValue(orderDataDto.cartValue())
-                .deliveryDistance(orderDataDto.deliveryDistance())
-                .numberOfItems(orderDataDto.numberOfItems())
-                .orderTime(orderDataDto.orderTime())
-                .build();
+        OrderDataDtoValidator.validate(orderDataDto);
+        OrderData orderData = OrderDataMapper.mapFromOrderDataDto(orderDataDto);
 
-        BigInteger cartValue = orderData.cartValue();
-        if (isCartTotalGreaterOrEqualFreeDeliveryLimit(cartValue)) {
+        if (isDeliveryFree(orderData.cartValue())) {
             return DeliveryFeeCalculatorResponseDto.builder()
                     .deliveryFee(NO_DELIVERY_FEE)
                     .build();
         }
-        BigInteger deliveryDistance = orderData.deliveryDistance();
-        BigInteger numberOfItems = orderData.numberOfItems();
-        ZonedDateTime orderDate = ZonedDateTime.parse(orderData.orderTime(), DateTimeFormatter.ISO_DATE_TIME);
-
-        BigInteger deliveryFee = calculateBaseDelivery(cartValue, deliveryDistance, numberOfItems);
-        deliveryFee = rushHoursValidator.calculate(orderDate, deliveryFee);
-        deliveryFee = finalFeeValidator.validate(deliveryFee);
 
         return DeliveryFeeCalculatorResponseDto.builder()
-                .deliveryFee(deliveryFee)
+                .deliveryFee(calculateNoFreeDeliverySomething(orderData))
                 .build();
     }
 
-    private boolean isCartTotalGreaterOrEqualFreeDeliveryLimit(BigInteger cartValue) {
+    // individual class with new method (+ creation of this class inside Configuration class)
+    private boolean isDeliveryFree(BigInteger cartValue) {
         return cartValue.compareTo(FREE_DELIVERY_LIMIT) >= 0;
+    }
+
+    // another individual class with calculate base delivery method + creation of this class inside Configuration class
+//    private BigInteger calculateNoFreeDeliverySomething(OrderData orderData) {
+//        BigInteger deliveryFee = calculateBaseDelivery(orderData.cartValue(), orderData.deliveryDistance(), orderData.numberOfItems());
+//
+//        deliveryFee = rushHoursValidator.calculate(orderData.orderTime(), deliveryFee);
+
+//        deliveryFee = finalFeeValidator.validate(deliveryFee);
+//        return deliveryFee;
+//    }
+
+    // second option of above code, there are no variables, only invocations
+    private BigInteger calculateNoFreeDeliverySomething(OrderData orderData) {
+        return finalFeeValidator
+                .validate(rushHoursValidator
+                        .calculate(orderData.orderTime(),
+                                calculateBaseDelivery(orderData.cartValue(),
+                                        orderData.deliveryDistance(),
+                                        orderData.numberOfItems())));
     }
 
     private BigInteger calculateBaseDelivery(BigInteger cartValue, BigInteger deliveryDistance, BigInteger numberOfItems) {

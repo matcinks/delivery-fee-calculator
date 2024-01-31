@@ -19,16 +19,11 @@ import java.math.BigInteger;
 public class DeliveryFeeCalculatorRestController {
 
     private final DeliveryFeeCalculatorFacade deliveryFeeCalculatorFacade;
-    
+
     @PostMapping("/deliveryFee")
     public ResponseEntity<DeliveryFeeCalculatorResponseDto> calculateDeliveryFee(@RequestBody @Valid OrderDataRequestDto requestDto) {
-        OrderDataDto orderDataDto = OrderDataDto.builder()
-                .cartValue(BigInteger.valueOf(requestDto.cartValue()))
-                .deliveryDistance(BigInteger.valueOf(requestDto.deliveryDistance()))
-                .numberOfItems(BigInteger.valueOf(requestDto.numberOfItems()))
-                .orderTime(requestDto.time())
-                .build();
+        OrderDataDto orderDataDto = OrderDataRequestDtoMapper.mapFromOrderDataRequestDto(requestDto);
         DeliveryFeeCalculatorResponseDto deliveryFeeCalculatorResponseDto = deliveryFeeCalculatorFacade.calculateDeliveryFee(orderDataDto);
-        return  ResponseEntity.ok(deliveryFeeCalculatorResponseDto);
+        return ResponseEntity.ok(deliveryFeeCalculatorResponseDto);
     }
 }

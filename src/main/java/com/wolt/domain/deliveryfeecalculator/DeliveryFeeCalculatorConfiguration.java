@@ -15,5 +15,4 @@ public class DeliveryFeeCalculatorConfiguration {
         FinalFeeValidator finalFeeValidator = new FinalFeeValidator();
         return new DeliveryFeeCalculatorFacade(cartCapacityCalculator, cartTotalCalculator, deliveryDistanceCalculator, rushHoursValidator, finalFeeValidator);
     }
-
 }
