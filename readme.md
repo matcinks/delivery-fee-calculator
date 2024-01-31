@@ -1,43 +1,66 @@
-# This is preliminary assignment for backend internship in Wolt Company in Berlin.
+# Preliminary Assignment for Wolt Summer 2024 Engineering Internship
+
+## Description
+
+This backend application, created in Kotlin, exposes an endpoint `/deliveryFee` for a POST request to calculate delivery fees based on specified conditions.
 
 ## Specification
 
-1. Rules for calculating a delivery fee
+- Rules for calculating a delivery fee:
+    - If the cart value is less than 10€, a small order surcharge is added.
+    - A base delivery fee for the first 1000 meters is 2€, and additional charges apply for longer distances.
+    - Additional surcharges based on the number of items, with a maximum fee of 15€.
+    - Free delivery for cart values equal to or more than 200€.
+    - Friday rush (3 - 7 PM UTC) multiplies the total fee by 1.2x, capped at 15€.
 
-   * ## If the cart value is less than 10€, a small order surcharge is added to the delivery price. The surcharge is the difference between the cart value and 10€. For example if the cart value is 8.90€, the surcharge will be 1.10€.
-   * ## A delivery fee for the first 1000 meters (=1km) is 2€. If the delivery distance is longer than that, 1€ is added for every additional 500 meters that the courier needs to travel before reaching the destination. Even if the distance would be shorter than 500 meters, the minimum fee is always 1€.
-     * Example 1: If the delivery distance is 1499 meters, the delivery fee is: 2€ base fee + 1€ for the additional 500 m => 3€
-     * Example 2: If the delivery distance is 1500 meters, the delivery fee is: 2€ base fee + 1€ for the additional 500 m => 3€
-     * Example 3: If the delivery distance is 1501 meters, the delivery fee is: 2€ base fee + 1€ for the first 500 m + 1€ for the second 500 m => 4€
-   * If the number of items is five or more, an additional 50 cent surcharge is added for each item above and including the fifth item. An extra "bulk" fee applies for more than 12 items of 1,20€
-     * Example 1: If the number of items is 4, no extra surcharge
-     * Example 2: If the number of items is 5, 50 cents surcharge is added
-     * Example 3: If the number of items is 10, 3€ surcharge (6 x 50 cents) is added
-     * Example 4: If the number of items is 13, 5,70€ surcharge is added ((9 * 50 cents) + 1,20€)
-     * Example 5: If the number of items is 14, 6,20€ surcharge is added ((10 * 50 cents) + 1,20€)
-   * The delivery fee can never be more than 15€, including possible surcharges.
-   * The delivery is free (0€) when the cart value is equal or more than 200€.
-   * During the Friday rush, 3 - 7 PM, the delivery fee (the total fee including possible surcharges) will be multiplied by 1.2x. However, the fee still cannot be more than the max (15€). Considering timezone, for simplicity, use UTC as a timezone in backend solutions (so Friday rush is 3 - 7 PM UTC). In frontend solutions, use the timezone of the browser (so Friday rush is 3 - 7 PM in the timezone of the browser).
+## Tests
 
-2. Backend specifics 
+The project includes several unit tests and integration tests.
 
-    * Implement an HTTP API (single POST endpoint) which calculates the delivery fee based on the information in the request payload (JSON) and includes the calculated delivery fee in the response payload (JSON).
+## Usage
 
-    * Request Example:
+### Using Terminal:
 
-    `{"cart_value": 790, "delivery_distance": 2235, "number_of_items": 4, "time": "2024-01-15T13:00:00Z"}`
+Requirements: Java 17, Maven 3.9.6.
+Navigate to project directory and run following commands:
 
+```bash
+mvn clean package
+java -jar ./target/deliver-fee-calculator-1.0.0-SNAPSHOT.jar
+```
 
-Field details
-Field	Type	Description	Example value
-cart_value	Integer	Value of the shopping cart in cents.	790 (790 cents = 7.90€)
-delivery_distance	Integer	The distance between the store and customer’s location in meters.	2235 (2235 meters = 2.235 km)
-number_of_items	Integer	The number of items in the customer's shopping cart.	4 (customer has 4 items in the cart)
-time	String	Order time in UTC in ISO format.	2024-01-15T13:00:00Z
-Response
-Example:
+### Using Docker:
 
-{"delivery_fee": 710}
-Field details
-Field	Type	Description	Example value
-delivery_fee	Integer	Calculated delivery fee in cents.	710 (710 cents = 7.10€)
+Requirements: Docker v24.0.7.
+Navigate to project directory and run following commands:
+
+```bash
+docker build -t delivery-fee-calculator .
+docker run delivery-fee-calculator
+```
+
+### Using IntelliJ:
+Import the project into the IDE.
+Mark additional directories:
+`src/integration/java` as "Test Sources Root" and 
+`src/integration/resources` as "Test Resources Root".
+Run the project inside the IDE.
+
+### Manual Testing
+Use tools like Postman to send a request to `http://localhost:8080/deliveryFee` with JSON-formatted data.
+
+Example request:
+```json
+{
+  "cart_value": 15,
+  "delivery_distance": 1200,
+  "number_of_items": 8,
+  "time": "2024-02-01T12:00:00Z"
+}
+```
+Response:
+```json
+{
+  "deliveryFee": 1385
+}
+```
