@@ -3,7 +3,7 @@ package com.wolt.domain.deliveryfeecalculator
 import java.math.BigInteger
 
 internal class CartTotalCalculator {
-    fun calculate(cartValue: BigInteger?): BigInteger {
+    fun calculate(cartValue: BigInteger): BigInteger {
         val cartValueDifference = REQUIRED_CART_VALUE.subtract(cartValue)
         return cartValueDifference.max(NO_ADDITIONAL_FEE)
     }

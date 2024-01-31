@@ -8,19 +8,18 @@ internal class DeliveryDistanceCalculator {
             return BASE_FEE_PER_500_METERS
         }
         val deliveryFee = deliveryDistance.divide(BASE_DISTANCE)
-                .multiply(BASE_FEE_PER_500_METERS)
+            .multiply(BASE_FEE_PER_500_METERS)
         return if (isTotalDistanceIncluded(deliveryDistance)) {
             deliveryFee
         } else deliveryFee.add(BASE_FEE_PER_500_METERS)
     }
 
     private fun isBaseDistance(deliveryDistance: BigInteger): Boolean {
-        return deliveryDistance.compareTo(BASE_DISTANCE) <= 0
+        return deliveryDistance <= BASE_DISTANCE
     }
 
     private fun isTotalDistanceIncluded(deliveryDistance: BigInteger): Boolean {
-        return deliveryDistance.remainder(BASE_FEE_PER_500_METERS)
-                .compareTo(BigInteger.ZERO) <= 0
+        return deliveryDistance.remainder(BASE_FEE_PER_500_METERS) <= BigInteger.ZERO
     }
 
     companion object {

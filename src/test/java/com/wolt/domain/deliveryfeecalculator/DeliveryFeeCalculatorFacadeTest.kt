@@ -2,8 +2,10 @@ package com.wolt.domain.deliveryfeecalculator
 
 import com.wolt.domain.deliveryfeecalculator.dto.OrderDataDto
 import org.junit.jupiter.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import java.math.BigDecimal
 import java.math.BigInteger
 import java.time.DayOfWeek
@@ -12,7 +14,9 @@ import java.time.ZonedDateTime
 import java.time.temporal.TemporalAdjusters
 
 internal class DeliveryFeeCalculatorFacadeTest {
-    var deliveryFeeCalculatorFacade = DeliveryFeeCalculatorConfiguration().deliveryFeeCalculatorFacade()
+    private var deliveryFeeCalculatorFacade: DeliveryFeeCalculatorFacade =
+        DeliveryFeeCalculatorConfiguration().deliveryFeeCalculatorFacade()
+
     @DisplayName("Should add remaining surcharge of 1 euro cent when order total is lower than 10 euro and add 1 euro delivery fee for delivery distance lower than 500 meters")
     @Test
     fun should_add_remaining_surcharge_when_order_total_is_lower_than_required_and_add_distance_delivery_fee() {
@@ -23,21 +27,21 @@ internal class DeliveryFeeCalculatorFacadeTest {
         val orderDate = ZonedDateTime.of(2024, 1, 19, 14, 59, 59, 0, ZoneId.of("UTC"))
         val orderDate2 = ZonedDateTime.now(ZoneId.of("UTC"))
         orderDate2.with(TemporalAdjusters.previousOrSame(DayOfWeek.FRIDAY))
-                .withHour(15)
-                .withMinute(0)
-                .withSecond(0)
-                .withNano(0)
-        val orderDataDto: OrderDataDto = OrderDataDto.builder()
-                .cartValue(cartValueInEuroCents)
-                .deliveryDistance(deliveryDistanceInMeters)
-                .numberOfItems(numberOfItemsInCart)
-                .orderTime(orderDate)
-                .build()
+            .withHour(15)
+            .withMinute(0)
+            .withSecond(0)
+            .withNano(0)
+        val orderDataDto = OrderDataDto(
+            cartValue = cartValueInEuroCents,
+            deliveryDistance = deliveryDistanceInMeters,
+            numberOfItems = numberOfItemsInCart,
+            orderTime = orderDate
+        )
         // when
         val deliveryFeeCalculatorResponseDto = deliveryFeeCalculatorFacade.calculateDeliveryFee(orderDataDto)
         // then
         val expectedDeliveryFee = BigInteger.valueOf((1 + 100).toLong())
-        assertThat(deliveryFeeCalculatorResponseDto.deliveryFee()).isEqualTo(expectedDeliveryFee)
+        assertThat(deliveryFeeCalculatorResponseDto.deliveryFee).isEqualTo(expectedDeliveryFee)
     }
 
     @DisplayName("Should not add remaining surcharge when order total is greater or equals 10 euro and add 2 euro delivery fee when delivery distance is 1000 meters")
@@ -48,17 +52,17 @@ internal class DeliveryFeeCalculatorFacadeTest {
         val deliveryDistanceInMeters = BigInteger.valueOf(1000)
         val numberOfItemsInCart = BigInteger.valueOf(4)
         val orderDate = ZonedDateTime.of(2024, 1, 19, 14, 59, 59, 0, ZoneId.of("UTC"))
-        val orderDataDto: OrderDataDto = OrderDataDto.builder()
-                .cartValue(cartValueInEuroCents)
-                .deliveryDistance(deliveryDistanceInMeters)
-                .numberOfItems(numberOfItemsInCart)
-                .orderTime(orderDate)
-                .build()
+        val orderDataDto = OrderDataDto(
+            cartValue = cartValueInEuroCents,
+            deliveryDistance = deliveryDistanceInMeters,
+            numberOfItems = numberOfItemsInCart,
+            orderTime = orderDate
+        )
         // when
         val deliveryFeeCalculatorResponseDto = deliveryFeeCalculatorFacade.calculateDeliveryFee(orderDataDto)
         // then
         val expectedDeliveryFee = BigInteger.valueOf(200)
-        assertThat(deliveryFeeCalculatorResponseDto.deliveryFee()).isEqualTo(expectedDeliveryFee)
+        assertThat(deliveryFeeCalculatorResponseDto.deliveryFee).isEqualTo(expectedDeliveryFee)
     }
 
     @DisplayName("Should add 3 euro delivery fee when delivery distance is exactly 1499 meters and there are no additional surcharges")
@@ -69,17 +73,17 @@ internal class DeliveryFeeCalculatorFacadeTest {
         val deliveryDistanceInMeters = BigInteger.valueOf(1499)
         val numberOfItemsInCart = BigInteger.valueOf(4)
         val orderDate = ZonedDateTime.of(2024, 1, 19, 14, 59, 59, 0, ZoneId.of("UTC"))
-        val orderDataDto: OrderDataDto = OrderDataDto.builder()
-                .cartValue(cartValueInEuroCents)
-                .deliveryDistance(deliveryDistanceInMeters)
-                .numberOfItems(numberOfItemsInCart)
-                .orderTime(orderDate)
-                .build()
+        val orderDataDto = OrderDataDto(
+            cartValue = cartValueInEuroCents,
+            deliveryDistance = deliveryDistanceInMeters,
+            numberOfItems = numberOfItemsInCart,
+            orderTime = orderDate
+        )
         // when
         val deliveryFeeCalculatorResponseDto = deliveryFeeCalculatorFacade.calculateDeliveryFee(orderDataDto)
         // then
         val expectedDeliveryFee = BigInteger.valueOf(300)
-        assertThat(deliveryFeeCalculatorResponseDto.deliveryFee()).isEqualTo(expectedDeliveryFee)
+        assertThat(deliveryFeeCalculatorResponseDto.deliveryFee).isEqualTo(expectedDeliveryFee)
     }
 
     @DisplayName("Should return 3 euro delivery fee when delivery distance is exactly 1500 meters and there are no additional surcharges")
@@ -90,17 +94,17 @@ internal class DeliveryFeeCalculatorFacadeTest {
         val deliveryDistanceInMeters = BigInteger.valueOf(1500)
         val numberOfItemsInCart = BigInteger.valueOf(4)
         val orderDate = ZonedDateTime.of(2024, 1, 19, 14, 59, 59, 0, ZoneId.of("UTC"))
-        val orderDataDto: OrderDataDto = OrderDataDto.builder()
-                .cartValue(cartValueInEuroCents)
-                .deliveryDistance(deliveryDistanceInMeters)
-                .numberOfItems(numberOfItemsInCart)
-                .orderTime(orderDate)
-                .build()
+        val orderDataDto = OrderDataDto(
+            cartValue = cartValueInEuroCents,
+            deliveryDistance = deliveryDistanceInMeters,
+            numberOfItems = numberOfItemsInCart,
+            orderTime = orderDate
+        )
         // when
         val deliveryFeeCalculatorResponseDto = deliveryFeeCalculatorFacade.calculateDeliveryFee(orderDataDto)
         // then
         val expectedDeliveryFee = BigInteger.valueOf(300)
-        assertThat(deliveryFeeCalculatorResponseDto.deliveryFee()).isEqualTo(expectedDeliveryFee)
+        assertThat(deliveryFeeCalculatorResponseDto.deliveryFee).isEqualTo(expectedDeliveryFee)
     }
 
     @DisplayName("Should return 4 euro delivery fee when delivery distance is exactly 1501 meters and there are no additional surcharges")
@@ -111,17 +115,17 @@ internal class DeliveryFeeCalculatorFacadeTest {
         val deliveryDistanceInMeters = BigInteger.valueOf(1501)
         val numberOfItemsInCart = BigInteger.valueOf(4)
         val orderDate = ZonedDateTime.of(2024, 1, 19, 14, 59, 59, 0, ZoneId.of("UTC"))
-        val orderDataDto: OrderDataDto = OrderDataDto.builder()
-                .cartValue(cartValueInEuroCents)
-                .deliveryDistance(deliveryDistanceInMeters)
-                .numberOfItems(numberOfItemsInCart)
-                .orderTime(orderDate)
-                .build()
+        val orderDataDto = OrderDataDto(
+            cartValue = cartValueInEuroCents,
+            deliveryDistance = deliveryDistanceInMeters,
+            numberOfItems = numberOfItemsInCart,
+            orderTime = orderDate
+        )
         // when
         val deliveryFeeCalculatorResponseDto = deliveryFeeCalculatorFacade.calculateDeliveryFee(orderDataDto)
         // then
         val expectedDeliveryFee = BigInteger.valueOf(400)
-        assertThat(deliveryFeeCalculatorResponseDto.deliveryFee()).isEqualTo(expectedDeliveryFee)
+        assertThat(deliveryFeeCalculatorResponseDto.deliveryFee).isEqualTo(expectedDeliveryFee)
     }
 
     @DisplayName("Should return 1 euro delivery fee when delivery distance is exactly 500 meters and there are no additional surcharges")
@@ -132,17 +136,17 @@ internal class DeliveryFeeCalculatorFacadeTest {
         val deliveryDistanceInMeters = BigInteger.valueOf(500)
         val numberOfItemsInCart = BigInteger.valueOf(4)
         val orderDate = ZonedDateTime.of(2024, 1, 19, 14, 59, 59, 0, ZoneId.of("UTC"))
-        val orderDataDto: OrderDataDto = OrderDataDto.builder()
-                .cartValue(cartValueInEuroCents)
-                .deliveryDistance(deliveryDistanceInMeters)
-                .numberOfItems(numberOfItemsInCart)
-                .orderTime(orderDate)
-                .build()
+        val orderDataDto = OrderDataDto(
+            cartValue = cartValueInEuroCents,
+            deliveryDistance = deliveryDistanceInMeters,
+            numberOfItems = numberOfItemsInCart,
+            orderTime = orderDate
+        )
         // when
         val deliveryFeeCalculatorResponseDto = deliveryFeeCalculatorFacade.calculateDeliveryFee(orderDataDto)
         // then
         val expectedDeliveryFee = BigInteger.valueOf(100)
-        assertThat(deliveryFeeCalculatorResponseDto.deliveryFee()).isEqualTo(expectedDeliveryFee)
+        assertThat(deliveryFeeCalculatorResponseDto.deliveryFee).isEqualTo(expectedDeliveryFee)
     }
 
     @DisplayName("Should add 50 cents delivery fee for one item above limit and one euro delivery distance fee and there are no additional surcharges")
@@ -153,17 +157,17 @@ internal class DeliveryFeeCalculatorFacadeTest {
         val deliveryDistanceInMeters = BigInteger.valueOf(500)
         val numberOfItemsInCart = BigInteger.valueOf(5)
         val orderDate = ZonedDateTime.of(2024, 1, 19, 14, 59, 59, 0, ZoneId.of("UTC"))
-        val orderDataDto: OrderDataDto = OrderDataDto.builder()
-                .cartValue(cartValueInEuroCents)
-                .deliveryDistance(deliveryDistanceInMeters)
-                .numberOfItems(numberOfItemsInCart)
-                .orderTime(orderDate)
-                .build()
+        val orderDataDto = OrderDataDto(
+            cartValue = cartValueInEuroCents,
+            deliveryDistance = deliveryDistanceInMeters,
+            numberOfItems = numberOfItemsInCart,
+            orderTime = orderDate
+        )
         // when
         val deliveryFeeCalculatorResponseDto = deliveryFeeCalculatorFacade.calculateDeliveryFee(orderDataDto)
         // then
         val expectedDeliveryFee = BigInteger.valueOf((50 + 100).toLong())
-        assertThat(deliveryFeeCalculatorResponseDto.deliveryFee()).isEqualTo(expectedDeliveryFee)
+        assertThat(deliveryFeeCalculatorResponseDto.deliveryFee).isEqualTo(expectedDeliveryFee)
     }
 
     @DisplayName("Should add 3 euro delivery fee for 6 items above limit and 1 euro delivery distance fee and there are no additional surcharges")
@@ -174,17 +178,17 @@ internal class DeliveryFeeCalculatorFacadeTest {
         val deliveryDistanceInMeters = BigInteger.valueOf(500)
         val numberOfItemsInCart = BigInteger.valueOf(10)
         val orderDate = ZonedDateTime.of(2024, 1, 19, 14, 59, 59, 0, ZoneId.of("UTC"))
-        val orderDataDto: OrderDataDto = OrderDataDto.builder()
-                .cartValue(cartValueInEuroCents)
-                .deliveryDistance(deliveryDistanceInMeters)
-                .numberOfItems(numberOfItemsInCart)
-                .orderTime(orderDate)
-                .build()
+        val orderDataDto = OrderDataDto(
+            cartValue = cartValueInEuroCents,
+            deliveryDistance = deliveryDistanceInMeters,
+            numberOfItems = numberOfItemsInCart,
+            orderTime = orderDate
+        )
         // when
         val deliveryFeeCalculatorResponseDto = deliveryFeeCalculatorFacade.calculateDeliveryFee(orderDataDto)
         // then
         val expectedDeliveryFee = BigInteger.valueOf((6 * 50 + 100).toLong())
-        assertThat(deliveryFeeCalculatorResponseDto.deliveryFee()).isEqualTo(expectedDeliveryFee)
+        assertThat(deliveryFeeCalculatorResponseDto.deliveryFee).isEqualTo(expectedDeliveryFee)
     }
 
     @DisplayName("Should add 5 euro delivery fee for 10 items above limit and bulk surcharge and one euro delivery distance fee and there are no additional surcharges")
@@ -195,17 +199,17 @@ internal class DeliveryFeeCalculatorFacadeTest {
         val deliveryDistanceInMeters = BigInteger.valueOf(500)
         val numberOfItemsInCart = BigInteger.valueOf(14)
         val orderDate = ZonedDateTime.of(2024, 1, 19, 14, 59, 59, 0, ZoneId.of("UTC"))
-        val orderDataDto: OrderDataDto = OrderDataDto.builder()
-                .cartValue(cartValueInEuroCents)
-                .deliveryDistance(deliveryDistanceInMeters)
-                .numberOfItems(numberOfItemsInCart)
-                .orderTime(orderDate)
-                .build()
+        val orderDataDto = OrderDataDto(
+            cartValue = cartValueInEuroCents,
+            deliveryDistance = deliveryDistanceInMeters,
+            numberOfItems = numberOfItemsInCart,
+            orderTime = orderDate
+        )
         // when
         val deliveryFeeCalculatorResponseDto = deliveryFeeCalculatorFacade.calculateDeliveryFee(orderDataDto)
         // then
         val expectedDeliveryFee = BigInteger.valueOf((10 * 50 + 120 + 100).toLong())
-        assertThat(deliveryFeeCalculatorResponseDto.deliveryFee()).isEqualTo(expectedDeliveryFee)
+        assertThat(deliveryFeeCalculatorResponseDto.deliveryFee).isEqualTo(expectedDeliveryFee)
     }
 
     @DisplayName("Should increase by 20 percent total delivery fee during beginning of rush hours")
@@ -216,17 +220,17 @@ internal class DeliveryFeeCalculatorFacadeTest {
         val deliveryDistanceInMeters = BigInteger.valueOf(500)
         val numberOfItemsInCart = BigInteger.valueOf(4)
         val orderDate = ZonedDateTime.of(2024, 1, 19, 15, 0, 0, 0, ZoneId.of("UTC"))
-        val orderDataDto: OrderDataDto = OrderDataDto.builder()
-                .cartValue(cartValueInEuroCents)
-                .deliveryDistance(deliveryDistanceInMeters)
-                .numberOfItems(numberOfItemsInCart)
-                .orderTime(orderDate)
-                .build()
+        val orderDataDto = OrderDataDto(
+            cartValue = cartValueInEuroCents,
+            deliveryDistance = deliveryDistanceInMeters,
+            numberOfItems = numberOfItemsInCart,
+            orderTime = orderDate
+        )
         // when
         val deliveryFeeCalculatorResponseDto = deliveryFeeCalculatorFacade.calculateDeliveryFee(orderDataDto)
         // then
         val expectedDeliveryFee = BigDecimal.valueOf(100 * 1.20)
-        assertThat(deliveryFeeCalculatorResponseDto.deliveryFee()).isEqualTo(expectedDeliveryFee.toBigInteger())
+        assertThat(deliveryFeeCalculatorResponseDto.deliveryFee).isEqualTo(expectedDeliveryFee.toBigInteger())
     }
 
     @DisplayName("Should increase by 20 percent total delivery fee during rush hours")
@@ -237,17 +241,17 @@ internal class DeliveryFeeCalculatorFacadeTest {
         val deliveryDistanceInMeters = BigInteger.valueOf(500)
         val numberOfItemsInCart = BigInteger.valueOf(4)
         val orderDate = ZonedDateTime.of(2024, 1, 19, 16, 30, 0, 0, ZoneId.of("UTC"))
-        val orderDataDto: OrderDataDto = OrderDataDto.builder()
-                .cartValue(cartValueInEuroCents)
-                .deliveryDistance(deliveryDistanceInMeters)
-                .numberOfItems(numberOfItemsInCart)
-                .orderTime(orderDate)
-                .build()
+        val orderDataDto = OrderDataDto(
+            cartValue = cartValueInEuroCents,
+            deliveryDistance = deliveryDistanceInMeters,
+            numberOfItems = numberOfItemsInCart,
+            orderTime = orderDate
+        )
         // when
         val deliveryFeeCalculatorResponseDto = deliveryFeeCalculatorFacade.calculateDeliveryFee(orderDataDto)
         // then
         val expectedDeliveryFee = BigDecimal.valueOf(100 * 1.20).toBigInteger()
-        assertThat(deliveryFeeCalculatorResponseDto.deliveryFee()).isEqualTo(expectedDeliveryFee)
+        assertThat(deliveryFeeCalculatorResponseDto.deliveryFee).isEqualTo(expectedDeliveryFee)
     }
 
     @DisplayName("Should increase by 20 percent total delivery fee during end of rush hours")
@@ -258,17 +262,17 @@ internal class DeliveryFeeCalculatorFacadeTest {
         val deliveryDistanceInMeters = BigInteger.valueOf(500)
         val numberOfItemsInCart = BigInteger.valueOf(4)
         val orderDate = ZonedDateTime.of(2024, 1, 19, 19, 0, 0, 0, ZoneId.of("UTC"))
-        val orderDataDto: OrderDataDto = OrderDataDto.builder()
-                .cartValue(cartValueInEuroCents)
-                .deliveryDistance(deliveryDistanceInMeters)
-                .numberOfItems(numberOfItemsInCart)
-                .orderTime(orderDate)
-                .build()
+        val orderDataDto = OrderDataDto(
+            cartValue = cartValueInEuroCents,
+            deliveryDistance = deliveryDistanceInMeters,
+            numberOfItems = numberOfItemsInCart,
+            orderTime = orderDate
+        )
         // when
         val deliveryFeeCalculatorResponseDto = deliveryFeeCalculatorFacade.calculateDeliveryFee(orderDataDto)
         // then
         val expectedDeliveryFee = BigDecimal.valueOf(100 * 1.20).toBigInteger()
-        assertThat(deliveryFeeCalculatorResponseDto.deliveryFee()).isEqualTo(expectedDeliveryFee)
+        assertThat(deliveryFeeCalculatorResponseDto.deliveryFee).isEqualTo(expectedDeliveryFee)
     }
 
     @DisplayName("Should not increase total delivery fee during same time window as rush hours but in a different week day")
@@ -279,17 +283,17 @@ internal class DeliveryFeeCalculatorFacadeTest {
         val deliveryDistanceInMeters = BigInteger.valueOf(500)
         val numberOfItemsInCart = BigInteger.valueOf(4)
         val orderDate = ZonedDateTime.of(2024, 1, 18, 15, 30, 0, 0, ZoneId.of("UTC"))
-        val orderDataDto: OrderDataDto = OrderDataDto.builder()
-                .cartValue(cartValueInEuroCents)
-                .deliveryDistance(deliveryDistanceInMeters)
-                .numberOfItems(numberOfItemsInCart)
-                .orderTime(orderDate)
-                .build()
+        val orderDataDto = OrderDataDto(
+            cartValue = cartValueInEuroCents,
+            deliveryDistance = deliveryDistanceInMeters,
+            numberOfItems = numberOfItemsInCart,
+            orderTime = orderDate
+        )
         // when
         val deliveryFeeCalculatorResponseDto = deliveryFeeCalculatorFacade.calculateDeliveryFee(orderDataDto)
         // then
         val expectedDeliveryFee = BigInteger.valueOf(100)
-        assertThat(deliveryFeeCalculatorResponseDto.deliveryFee()).isEqualTo(expectedDeliveryFee)
+        assertThat(deliveryFeeCalculatorResponseDto.deliveryFee).isEqualTo(expectedDeliveryFee)
     }
 
     @DisplayName("Should return 15 euros total delivery fee when calculated total delivery fee is above limit")
@@ -300,17 +304,17 @@ internal class DeliveryFeeCalculatorFacadeTest {
         val deliveryDistanceInMeters = BigInteger.valueOf(5000)
         val numberOfItemsInCart = BigInteger.valueOf(20)
         val orderDate = ZonedDateTime.of(2024, 1, 19, 13, 0, 0, 0, ZoneId.of("UTC"))
-        val orderDataDto: OrderDataDto = OrderDataDto.builder()
-                .cartValue(cartValueInEuroCents)
-                .deliveryDistance(deliveryDistanceInMeters)
-                .numberOfItems(numberOfItemsInCart)
-                .orderTime(orderDate)
-                .build()
+        val orderDataDto = OrderDataDto(
+            cartValue = cartValueInEuroCents,
+            deliveryDistance = deliveryDistanceInMeters,
+            numberOfItems = numberOfItemsInCart,
+            orderTime = orderDate
+        )
         // when
         val deliveryFeeCalculatorResponseDto = deliveryFeeCalculatorFacade.calculateDeliveryFee(orderDataDto)
         // then
         val expectedDeliveryFee = BigInteger.valueOf(1500)
-        assertThat(deliveryFeeCalculatorResponseDto.deliveryFee()).isEqualTo(expectedDeliveryFee)
+        assertThat(deliveryFeeCalculatorResponseDto.deliveryFee).isEqualTo(expectedDeliveryFee)
     }
 
     @DisplayName("Should return free delivery fee when total cart is equal to 200 euro")
@@ -321,17 +325,17 @@ internal class DeliveryFeeCalculatorFacadeTest {
         val deliveryDistanceInMeters = BigInteger.valueOf(500)
         val numberOfItemsInCart = BigInteger.valueOf(10)
         val orderDate = ZonedDateTime.of(2024, 1, 19, 13, 0, 0, 0, ZoneId.of("UTC"))
-        val orderDataDto: OrderDataDto = OrderDataDto.builder()
-                .cartValue(cartValueInEuroCents)
-                .deliveryDistance(deliveryDistanceInMeters)
-                .numberOfItems(numberOfItemsInCart)
-                .orderTime(orderDate)
-                .build()
+        val orderDataDto = OrderDataDto(
+            cartValue = cartValueInEuroCents,
+            deliveryDistance = deliveryDistanceInMeters,
+            numberOfItems = numberOfItemsInCart,
+            orderTime = orderDate
+        )
         // when
         val deliveryFeeCalculatorResponseDto = deliveryFeeCalculatorFacade.calculateDeliveryFee(orderDataDto)
         // then
         val expectedDeliveryFee = BigInteger.ZERO
-        assertThat(deliveryFeeCalculatorResponseDto.deliveryFee()).isEqualTo(expectedDeliveryFee)
+        assertThat(deliveryFeeCalculatorResponseDto.deliveryFee).isEqualTo(expectedDeliveryFee)
     }
 
     @DisplayName("Should return free delivery fee when total cart is above 200 euros")
@@ -342,17 +346,17 @@ internal class DeliveryFeeCalculatorFacadeTest {
         val deliveryDistanceInMeters = BigInteger.valueOf(500)
         val numberOfItemsInCart = BigInteger.valueOf(10)
         val orderDate = ZonedDateTime.of(2024, 1, 19, 13, 0, 0, 0, ZoneId.of("UTC"))
-        val orderDataDto: OrderDataDto = OrderDataDto.builder()
-                .cartValue(cartValueInEuroCents)
-                .deliveryDistance(deliveryDistanceInMeters)
-                .numberOfItems(numberOfItemsInCart)
-                .orderTime(orderDate)
-                .build()
+        val orderDataDto = OrderDataDto(
+            cartValue = cartValueInEuroCents,
+            deliveryDistance = deliveryDistanceInMeters,
+            numberOfItems = numberOfItemsInCart,
+            orderTime = orderDate
+        )
         // when
         val deliveryFeeCalculatorResponseDto = deliveryFeeCalculatorFacade.calculateDeliveryFee(orderDataDto)
         // then
         val expectedDeliveryFee = BigInteger.ZERO
-        assertThat(deliveryFeeCalculatorResponseDto.deliveryFee()).isEqualTo(expectedDeliveryFee)
+        assertThat(deliveryFeeCalculatorResponseDto.deliveryFee).isEqualTo(expectedDeliveryFee)
     }
 
     @DisplayName("Should throw exception when cart value is zero")
@@ -363,15 +367,17 @@ internal class DeliveryFeeCalculatorFacadeTest {
         val deliveryDistanceInMeters = BigInteger.valueOf(500)
         val numberOfItemsInCart = BigInteger.valueOf(3)
         val orderDate = ZonedDateTime.of(2024, 1, 19, 13, 0, 0, 0, ZoneId.of("UTC"))
-        val orderDataDto: OrderDataDto = OrderDataDto.builder()
-                .cartValue(cartValueInEuroCents)
-                .deliveryDistance(deliveryDistanceInMeters)
-                .numberOfItems(numberOfItemsInCart)
-                .orderTime(orderDate)
-                .build()
+        val orderDataDto = OrderDataDto(
+            cartValue = cartValueInEuroCents,
+            deliveryDistance = deliveryDistanceInMeters,
+            numberOfItems = numberOfItemsInCart,
+            orderTime = orderDate
+        )
         // when
         // then
-        Assertions.assertThrows(OrderDataNotValidException::class.java, { deliveryFeeCalculatorFacade.calculateDeliveryFee(orderDataDto) }, "Cart value must not be null or negative")
+        assertThrows<OrderDataNotValidException>("Cart value must not be null or negative") {
+            deliveryFeeCalculatorFacade.calculateDeliveryFee(orderDataDto)
+        }
     }
 
     @DisplayName("Should throw exception when cart value is negative number")
@@ -382,15 +388,17 @@ internal class DeliveryFeeCalculatorFacadeTest {
         val deliveryDistanceInMeters = BigInteger.valueOf(500)
         val numberOfItemsInCart = BigInteger.valueOf(3)
         val orderDate = ZonedDateTime.of(2024, 1, 19, 13, 0, 0, 0, ZoneId.of("UTC"))
-        val orderDataDto: OrderDataDto = OrderDataDto.builder()
-                .cartValue(cartValueInEuroCents)
-                .deliveryDistance(deliveryDistanceInMeters)
-                .numberOfItems(numberOfItemsInCart)
-                .orderTime(orderDate)
-                .build()
+        val orderDataDto = OrderDataDto(
+            cartValue = cartValueInEuroCents,
+            deliveryDistance = deliveryDistanceInMeters,
+            numberOfItems = numberOfItemsInCart,
+            orderTime = orderDate
+        )
         // when
         // then
-        Assertions.assertThrows(OrderDataNotValidException::class.java, { deliveryFeeCalculatorFacade.calculateDeliveryFee(orderDataDto) }, "Cart value must not be null or negative")
+        assertThrows<OrderDataNotValidException>("Cart value must not be null or negative") {
+            deliveryFeeCalculatorFacade.calculateDeliveryFee(orderDataDto)
+        }
     }
 
     @DisplayName("Should throw exception when cart value is null")
@@ -400,14 +408,17 @@ internal class DeliveryFeeCalculatorFacadeTest {
         val deliveryDistanceInMeters = BigInteger.valueOf(500)
         val numberOfItemsInCart = BigInteger.valueOf(3)
         val orderDate = ZonedDateTime.of(2024, 1, 19, 13, 0, 0, 0, ZoneId.of("UTC"))
-        val orderDataDto: OrderDataDto = OrderDataDto.builder()
-                .deliveryDistance(deliveryDistanceInMeters)
-                .numberOfItems(numberOfItemsInCart)
-                .orderTime(orderDate)
-                .build()
+        val orderDataDto = OrderDataDto(
+            cartValue = null,
+            deliveryDistance = deliveryDistanceInMeters,
+            numberOfItems = numberOfItemsInCart,
+            orderTime = orderDate
+        )
         // when
         // then
-        Assertions.assertThrows(OrderDataNotValidException::class.java, { deliveryFeeCalculatorFacade.calculateDeliveryFee(orderDataDto) }, "Cart value must not be null or negative")
+        assertThrows<OrderDataNotValidException>("Cart value must not be null or negative") {
+            deliveryFeeCalculatorFacade.calculateDeliveryFee(orderDataDto)
+        }
     }
 
     @DisplayName("Should throw exception when delivery distance is zero")
@@ -418,15 +429,17 @@ internal class DeliveryFeeCalculatorFacadeTest {
         val deliveryDistanceInMeters = BigInteger.valueOf(0)
         val numberOfItemsInCart = BigInteger.valueOf(3)
         val orderDate = ZonedDateTime.of(2024, 1, 19, 13, 0, 0, 0, ZoneId.of("UTC"))
-        val orderDataDto: OrderDataDto = OrderDataDto.builder()
-                .cartValue(cartValueInEuroCents)
-                .deliveryDistance(deliveryDistanceInMeters)
-                .numberOfItems(numberOfItemsInCart)
-                .orderTime(orderDate)
-                .build()
+        val orderDataDto = OrderDataDto(
+            cartValue = cartValueInEuroCents,
+            deliveryDistance = deliveryDistanceInMeters,
+            numberOfItems = numberOfItemsInCart,
+            orderTime = orderDate
+        )
         // when
         // then
-        Assertions.assertThrows(OrderDataNotValidException::class.java, { deliveryFeeCalculatorFacade.calculateDeliveryFee(orderDataDto) }, "Delivery distance must not be null or negative")
+        assertThrows<OrderDataNotValidException>("Delivery distance must not be null or negative") {
+            deliveryFeeCalculatorFacade.calculateDeliveryFee(orderDataDto)
+        }
     }
 
     @DisplayName("Should throw exception when delivery distance value is negative number")
@@ -437,15 +450,17 @@ internal class DeliveryFeeCalculatorFacadeTest {
         val deliveryDistanceInMeters = BigInteger.valueOf(-500)
         val numberOfItemsInCart = BigInteger.valueOf(3)
         val orderDate = ZonedDateTime.of(2024, 1, 19, 13, 0, 0, 0, ZoneId.of("UTC"))
-        val orderDataDto: OrderDataDto = OrderDataDto.builder()
-                .cartValue(cartValueInEuroCents)
-                .deliveryDistance(deliveryDistanceInMeters)
-                .numberOfItems(numberOfItemsInCart)
-                .orderTime(orderDate)
-                .build()
+        val orderDataDto = OrderDataDto(
+            cartValue = cartValueInEuroCents,
+            deliveryDistance = deliveryDistanceInMeters,
+            numberOfItems = numberOfItemsInCart,
+            orderTime = orderDate
+        )
         // when
         // then
-        Assertions.assertThrows(OrderDataNotValidException::class.java, { deliveryFeeCalculatorFacade.calculateDeliveryFee(orderDataDto) }, "Delivery distance must not be null or negative")
+        assertThrows<OrderDataNotValidException>("Delivery distance must not be null or negative") {
+            deliveryFeeCalculatorFacade.calculateDeliveryFee(orderDataDto)
+        }
     }
 
     @DisplayName("Should throw exception when delivery distance value is null")
@@ -455,14 +470,17 @@ internal class DeliveryFeeCalculatorFacadeTest {
         val cartValueInEuroCents = BigInteger.valueOf(1000)
         val numberOfItemsInCart = BigInteger.valueOf(3)
         val orderDate = ZonedDateTime.of(2024, 1, 19, 13, 0, 0, 0, ZoneId.of("UTC"))
-        val orderDataDto: OrderDataDto = OrderDataDto.builder()
-                .cartValue(cartValueInEuroCents)
-                .numberOfItems(numberOfItemsInCart)
-                .orderTime(orderDate)
-                .build()
+        val orderDataDto = OrderDataDto(
+            cartValue = cartValueInEuroCents,
+            deliveryDistance = null,
+            numberOfItems = numberOfItemsInCart,
+            orderTime = orderDate
+        )
         // when
         // then
-        Assertions.assertThrows(OrderDataNotValidException::class.java, { deliveryFeeCalculatorFacade.calculateDeliveryFee(orderDataDto) }, "Delivery distance must not be null or negative")
+        assertThrows<OrderDataNotValidException>("Delivery distance must not be null or negative") {
+            deliveryFeeCalculatorFacade.calculateDeliveryFee(orderDataDto)
+        }
     }
 
     @DisplayName("Should throw exception when number of items is zero")
@@ -473,15 +491,17 @@ internal class DeliveryFeeCalculatorFacadeTest {
         val deliveryDistanceInMeters = BigInteger.valueOf(500)
         val numberOfItemsInCart = BigInteger.valueOf(0)
         val orderDate = ZonedDateTime.of(2024, 1, 19, 13, 0, 0, 0, ZoneId.of("UTC"))
-        val orderDataDto: OrderDataDto = OrderDataDto.builder()
-                .cartValue(cartValueInEuroCents)
-                .deliveryDistance(deliveryDistanceInMeters)
-                .numberOfItems(numberOfItemsInCart)
-                .orderTime(orderDate)
-                .build()
+        val orderDataDto = OrderDataDto(
+            cartValue = cartValueInEuroCents,
+            deliveryDistance = deliveryDistanceInMeters,
+            numberOfItems = numberOfItemsInCart,
+            orderTime = orderDate
+        )
         // when
         // then
-        Assertions.assertThrows(OrderDataNotValidException::class.java, { deliveryFeeCalculatorFacade.calculateDeliveryFee(orderDataDto) }, "Number of items must not be null or negative")
+        assertThrows<OrderDataNotValidException>("Number of items must not be null or negative") {
+            deliveryFeeCalculatorFacade.calculateDeliveryFee(orderDataDto)
+        }
     }
 
     @DisplayName("Should throw exception when number of items is negative number")
@@ -492,15 +512,17 @@ internal class DeliveryFeeCalculatorFacadeTest {
         val deliveryDistanceInMeters = BigInteger.valueOf(500)
         val numberOfItemsInCart = BigInteger.valueOf(-3)
         val orderDate = ZonedDateTime.of(2024, 1, 19, 13, 0, 0, 0, ZoneId.of("UTC"))
-        val orderDataDto: OrderDataDto = OrderDataDto.builder()
-                .cartValue(cartValueInEuroCents)
-                .deliveryDistance(deliveryDistanceInMeters)
-                .numberOfItems(numberOfItemsInCart)
-                .orderTime(orderDate)
-                .build()
+        val orderDataDto = OrderDataDto(
+            cartValue = cartValueInEuroCents,
+            deliveryDistance = deliveryDistanceInMeters,
+            numberOfItems = numberOfItemsInCart,
+            orderTime = orderDate
+        )
         // when
         // then
-        Assertions.assertThrows(OrderDataNotValidException::class.java, { deliveryFeeCalculatorFacade.calculateDeliveryFee(orderDataDto) }, "Number of items must not be null or negative")
+        assertThrows<OrderDataNotValidException>("Number of items must not be null or negative") {
+            deliveryFeeCalculatorFacade.calculateDeliveryFee(orderDataDto)
+        }
     }
 
     @DisplayName("Should throw exception when number of items is null")
@@ -510,14 +532,17 @@ internal class DeliveryFeeCalculatorFacadeTest {
         val cartValueInEuroCents = BigInteger.valueOf(1000)
         val deliveryDistanceInMeters = BigInteger.valueOf(500)
         val orderDate = ZonedDateTime.of(2024, 1, 19, 13, 0, 0, 0, ZoneId.of("UTC"))
-        val orderDataDto: OrderDataDto = OrderDataDto.builder()
-                .cartValue(cartValueInEuroCents)
-                .deliveryDistance(deliveryDistanceInMeters)
-                .orderTime(orderDate)
-                .build()
+        val orderDataDto = OrderDataDto(
+            cartValue = cartValueInEuroCents,
+            deliveryDistance = deliveryDistanceInMeters,
+            numberOfItems = null,
+            orderTime = orderDate
+        )
         // when
         // then
-        Assertions.assertThrows(OrderDataNotValidException::class.java, { deliveryFeeCalculatorFacade.calculateDeliveryFee(orderDataDto) }, "Number of items must not be null or negative")
+        assertThrows<OrderDataNotValidException>("Number of items must not be null or negative") {
+            deliveryFeeCalculatorFacade.calculateDeliveryFee(orderDataDto)
+        }
     }
 
     @DisplayName("Should throw exception when order date is null")
@@ -527,13 +552,16 @@ internal class DeliveryFeeCalculatorFacadeTest {
         val cartValueInEuroCents = BigInteger.valueOf(1000)
         val deliveryDistanceInMeters = BigInteger.valueOf(500)
         val numberOfItemsInCart = BigInteger.valueOf(3)
-        val orderDataDto: OrderDataDto = OrderDataDto.builder()
-                .cartValue(cartValueInEuroCents)
-                .deliveryDistance(deliveryDistanceInMeters)
-                .numberOfItems(numberOfItemsInCart)
-                .build()
+        val orderDataDto = OrderDataDto(
+            cartValue = cartValueInEuroCents,
+            deliveryDistance = deliveryDistanceInMeters,
+            numberOfItems = numberOfItemsInCart,
+            orderTime = null
+        )
         // when
         // then
-        val exception = Assertions.assertThrows(OrderDataNotValidException::class.java, { deliveryFeeCalculatorFacade.calculateDeliveryFee(orderDataDto) }, "Order time must not be null")
+        assertThrows<OrderDataNotValidException>("Number of items must not be null or negative") {
+            deliveryFeeCalculatorFacade.calculateDeliveryFee(orderDataDto)
+        }
     }
 }

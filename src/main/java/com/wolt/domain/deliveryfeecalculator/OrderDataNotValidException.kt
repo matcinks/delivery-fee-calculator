@@ -1,3 +1,3 @@
 package com.wolt.domain.deliveryfeecalculator
 
-class OrderDataNotValidException internal constructor(message: String?) : RuntimeException(message)
+class OrderDataNotValidException internal constructor(val errorMessages: List<String>) : RuntimeException(errorMessages.joinToString(", "))

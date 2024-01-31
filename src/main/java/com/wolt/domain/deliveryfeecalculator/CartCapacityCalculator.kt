@@ -8,18 +8,18 @@ internal class CartCapacityCalculator {
             return BigInteger.ZERO
         }
         val deliveryFee = numberOfItems.subtract(MAX_NUMBER_OF_ITEMS_WITHOUT_FEE)
-                .multiply(BASE_SURCHARGE)
+            .multiply(BASE_SURCHARGE)
         return if (isAmountOfItemsGreaterThanTwelve(numberOfItems)) {
             deliveryFee.add(BULK_FEE)
         } else deliveryFee
     }
 
     private fun isAmountOfItemsGreaterThanFour(numberOfItems: BigInteger): Boolean {
-        return numberOfItems.compareTo(MAX_NUMBER_OF_ITEMS_WITHOUT_FEE) > 0
+        return numberOfItems > MAX_NUMBER_OF_ITEMS_WITHOUT_FEE
     }
 
     private fun isAmountOfItemsGreaterThanTwelve(numberOfItems: BigInteger): Boolean {
-        return numberOfItems.compareTo(MAX_NUMBER_OF_ITEMS_WITHOUT_BULK_FEE) > 0
+        return numberOfItems > MAX_NUMBER_OF_ITEMS_WITHOUT_BULK_FEE
     }
 
     companion object {

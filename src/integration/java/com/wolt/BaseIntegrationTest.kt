@@ -11,9 +11,10 @@ import org.springframework.test.web.servlet.MockMvc
 @ActiveProfiles("integration")
 @AutoConfigureMockMvc
 open class BaseIntegrationTest {
-    @Autowired
-    var mockMvc: MockMvc? = null
 
     @Autowired
-    var objectMapper: ObjectMapper? = null
+    lateinit var mockMvc: MockMvc
+
+    @Autowired
+    lateinit var objectMapper: ObjectMapper
 }

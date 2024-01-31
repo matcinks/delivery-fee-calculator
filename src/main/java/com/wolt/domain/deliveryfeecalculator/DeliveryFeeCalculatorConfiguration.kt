@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration
 @Configuration
 open class DeliveryFeeCalculatorConfiguration {
     @Bean
-    fun deliveryFeeCalculatorFacade(): DeliveryFeeCalculatorFacade {
+    open fun deliveryFeeCalculatorFacade(): DeliveryFeeCalculatorFacade {
         val freeDeliveryCalculator = FreeDeliveryCalculator()
         val deliveryFeeCalculator = totalDeliveryFeeCalculator()
         return DeliveryFeeCalculatorFacade(freeDeliveryCalculator, deliveryFeeCalculator)

@@ -4,7 +4,7 @@ import java.math.BigInteger
 
 internal class FreeDeliveryCalculator {
     fun isDeliveryFree(cartValue: BigInteger): Boolean {
-        return cartValue.compareTo(FREE_DELIVERY_LIMIT) >= 0
+        return cartValue >= FREE_DELIVERY_LIMIT
     }
 
     companion object {

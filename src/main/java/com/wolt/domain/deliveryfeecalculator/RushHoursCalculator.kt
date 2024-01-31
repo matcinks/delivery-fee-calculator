@@ -13,7 +13,7 @@ internal class RushHoursCalculator {
             return deliveryFee
         }
         val increasedFee = BigDecimal(deliveryFee).multiply(INCREASE_RATE)
-                .setScale(0, RoundingMode.DOWN)
+            .setScale(0, RoundingMode.DOWN)
         return increasedFee.toBigInteger()
     }
 

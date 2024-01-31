@@ -1,27 +1,33 @@
-package com.wolt.domain.deliveryfeecalculator
-
+import com.wolt.domain.deliveryfeecalculator.OrderDataNotValidException
 import com.wolt.domain.deliveryfeecalculator.dto.OrderDataDto
 import java.math.BigInteger
 import java.time.ZonedDateTime
 
 internal object OrderDataDtoValidator {
-    private const val NULL_OR_NEGATIVE_MESSAGE = " must not be null or negative"
-    fun validate(orderDataDto: OrderDataDto?) {
-        validateNonNegative(orderDataDto!!.cartValue, "Cart value")
-        validateNonNegative(orderDataDto.deliveryDistance, "Delivery distance")
-        validateNonNegative(orderDataDto.numberOfItems, "Number of items")
-        validateNotNull(orderDataDto.orderTime)
-    }
+    private const val NULL_OR_NEGATIVE_MESSAGE = " must be not null"
 
-    private fun validateNonNegative(value: BigInteger?, fieldName: String) {
-        if (value == null || value.compareTo(BigInteger.ZERO) <= 0) {
-            throw OrderDataNotValidException(fieldName + NULL_OR_NEGATIVE_MESSAGE)
+    internal fun validate(orderDataDto: OrderDataDto) {
+        val errorMessages = mutableListOf<String>()
+
+        validateNonNegative(orderDataDto.cartValue, "cart value", errorMessages)
+        validateNonNegative(orderDataDto.deliveryDistance, "delivery distance", errorMessages)
+        validateNonNegative(orderDataDto.numberOfItems, "number of items", errorMessages)
+        validateNotNull(orderDataDto.orderTime, errorMessages)
+
+        if (errorMessages.isNotEmpty()) {
+            throw OrderDataNotValidException(errorMessages)
         }
     }
 
-    private fun validateNotNull(dateTime: ZonedDateTime?) {
+    private fun validateNonNegative(value: BigInteger?, fieldName: String, errorMessages: MutableList<String>) {
+        if (value == null || value <= BigInteger.ZERO) {
+            errorMessages.add(fieldName + NULL_OR_NEGATIVE_MESSAGE)
+        }
+    }
+
+    private fun validateNotNull(dateTime: ZonedDateTime?, errorMessages: MutableList<String>) {
         if (dateTime == null) {
-            throw OrderDataNotValidException("Order time must not be null")
+            errorMessages.add("order time must be not null")
         }
     }
 }

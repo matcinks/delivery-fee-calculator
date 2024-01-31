@@ -2,13 +2,13 @@ package com.wolt.domain.deliveryfeecalculator
 
 import com.wolt.domain.deliveryfeecalculator.dto.OrderDataDto
 
-object OrderDataMapper {
-    fun mapFromOrderDataDto(orderDataDto: OrderDataDto?): OrderData {
-        return OrderData.builder()
-                .cartValue(orderDataDto!!.cartValue)
-                .deliveryDistance(orderDataDto.deliveryDistance)
-                .numberOfItems(orderDataDto.numberOfItems)
-                .orderTime(orderDataDto.orderTime)
-                .build()
+internal object OrderDataMapper {
+    internal fun mapFromOrderDataDto(orderDataDto: OrderDataDto): OrderData {
+        return OrderData(
+                cartValue = requireNotNull(orderDataDto.cartValue),
+                deliveryDistance = requireNotNull(orderDataDto.deliveryDistance),
+                numberOfItems = requireNotNull(orderDataDto.numberOfItems),
+                orderTime = requireNotNull(orderDataDto.orderTime)
+        )
     }
 }
