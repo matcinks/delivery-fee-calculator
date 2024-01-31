@@ -7,12 +7,22 @@ import org.springframework.context.annotation.Configuration;
 public class DeliveryFeeCalculatorConfiguration {
 
     @Bean
-    DeliveryFeeCalculatorFacade deliveryFeeCalculatorFacade(){
-        CartCapacityCalculator cartCapacityCalculator = new CartCapacityCalculator();
+    DeliveryFeeCalculatorFacade deliveryFeeCalculatorFacade() {
+        FreeDeliveryCalculator freeDeliveryCalculator = new FreeDeliveryCalculator();
+        TotalDeliveryFeeCalculator deliveryFeeCalculator = totalDeliveryFeeCalculator();
+        return new DeliveryFeeCalculatorFacade(freeDeliveryCalculator, deliveryFeeCalculator);
+    }
+
+    private TotalDeliveryFeeCalculator totalDeliveryFeeCalculator() {
         CartTotalCalculator cartTotalCalculator = new CartTotalCalculator();
         DeliveryDistanceCalculator deliveryDistanceCalculator = new DeliveryDistanceCalculator();
-        RushHoursValidator rushHoursValidator = new RushHoursValidator();
+        CartCapacityCalculator cartCapacityCalculator = new CartCapacityCalculator();
+        RushHoursCalculator rushHoursCalculator = new RushHoursCalculator();
         FinalFeeValidator finalFeeValidator = new FinalFeeValidator();
-        return new DeliveryFeeCalculatorFacade(cartCapacityCalculator, cartTotalCalculator, deliveryDistanceCalculator, rushHoursValidator, finalFeeValidator);
+        return new TotalDeliveryFeeCalculator(cartTotalCalculator,
+                deliveryDistanceCalculator,
+                cartCapacityCalculator,
+                rushHoursCalculator,
+                finalFeeValidator);
     }
 }

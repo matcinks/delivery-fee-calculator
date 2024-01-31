@@ -132,6 +132,27 @@ class DeliveryFeeCalculatorFacadeTest {
         assertThat(deliveryFeeCalculatorResponseDto.deliveryFee()).isEqualTo(expectedDeliveryFee);
     }
 
+    @DisplayName("Should return 1 euro delivery fee when delivery distance is exactly 500 meters and there are no additional surcharges")
+    @Test
+    void should_return_distance_delivery_fee_when_delivery_distance_is_500_meters_and_there_are_no_additional_surcharges() {
+        // given
+        BigInteger cartValueInEuroCents = BigInteger.valueOf(10_00);
+        BigInteger deliveryDistanceInMeters = BigInteger.valueOf(500);
+        BigInteger numberOfItemsInCart = BigInteger.valueOf(4);
+        ZonedDateTime orderDate = ZonedDateTime.of(2024, 1,19,14, 59, 59,0, ZoneId.of("UTC"));
+        OrderDataDto orderDataDto = OrderDataDto.builder()
+                .cartValue(cartValueInEuroCents)
+                .deliveryDistance(deliveryDistanceInMeters)
+                .numberOfItems(numberOfItemsInCart)
+                .orderTime(orderDate)
+                .build();;
+        // when
+        DeliveryFeeCalculatorResponseDto deliveryFeeCalculatorResponseDto = deliveryFeeCalculatorFacade.calculateDeliveryFee(orderDataDto);
+        // then
+        BigInteger expectedDeliveryFee = BigInteger.valueOf(1_00);
+        assertThat(deliveryFeeCalculatorResponseDto.deliveryFee()).isEqualTo(expectedDeliveryFee);
+    }
+
     @DisplayName("Should add 50 cents delivery fee for one item above limit and one euro delivery distance fee and there are no additional surcharges")
     @Test
     void should_add_items_above_limit_delivery_fee_for_one_item_above_limit_and_distance_delivery_fee_and_there_are_no_additional_surcharges() {

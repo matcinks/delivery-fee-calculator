@@ -10,13 +10,13 @@ class CartCapacityCalculator {
     private final static BigInteger BULK_FEE = BigInteger.valueOf(1_20);
 
     BigInteger calculate(BigInteger numberOfItems) {
-        BigInteger deliveryFee = BigInteger.ZERO;
-        if (isAmountOfItemsGreaterThanFour(numberOfItems)) {
-            deliveryFee = numberOfItems.subtract(MAX_NUMBER_OF_ITEMS_WITHOUT_FEE)
-                    .multiply(BASE_SURCHARGE);
+        if (!isAmountOfItemsGreaterThanFour(numberOfItems)) {
+            return BigInteger.ZERO;
         }
+        BigInteger deliveryFee = numberOfItems.subtract(MAX_NUMBER_OF_ITEMS_WITHOUT_FEE)
+                .multiply(BASE_SURCHARGE);
         if (isAmountOfItemsGreaterThanTwelve(numberOfItems)) {
-            deliveryFee = deliveryFee.add(BULK_FEE);
+            return deliveryFee.add(BULK_FEE);
         }
         return deliveryFee;
     }

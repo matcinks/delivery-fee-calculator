@@ -7,7 +7,7 @@ import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.time.ZonedDateTime;
 
-class RushHoursValidator {
+class RushHoursCalculator {
 
     private static final DayOfWeek RUSH_DAY = DayOfWeek.FRIDAY;
     private static final LocalTime RUSH_TIME_BEGIN = LocalTime.of(14, 59, 59);
