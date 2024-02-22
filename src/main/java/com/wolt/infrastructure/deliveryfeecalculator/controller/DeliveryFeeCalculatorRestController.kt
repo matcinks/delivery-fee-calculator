@@ -4,6 +4,7 @@ import com.wolt.domain.deliveryfeecalculator.DeliveryFeeCalculatorFacade
 import com.wolt.domain.deliveryfeecalculator.dto.DeliveryFeeCalculatorResponseDto
 import jakarta.validation.Valid
 import lombok.extern.log4j.Log4j2
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody

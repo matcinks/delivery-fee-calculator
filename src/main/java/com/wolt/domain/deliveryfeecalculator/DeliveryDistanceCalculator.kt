@@ -24,6 +24,6 @@ internal class DeliveryDistanceCalculator {
 
     companion object {
         private val BASE_DISTANCE = BigInteger.valueOf(500)
-        private val BASE_FEE_PER_500_METERS = BigInteger.valueOf(100)
+        private val BASE_FEE_PER_500_METERS = BigInteger.valueOf(1_00)
     }
 }

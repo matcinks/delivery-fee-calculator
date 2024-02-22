@@ -14,6 +14,6 @@ internal class FinalFeeValidator {
     }
 
     companion object {
-        private val MAX_DELIVERY_FEE = BigInteger.valueOf(1500)
+        private val MAX_DELIVERY_FEE = BigInteger.valueOf(15_00)
     }
 }

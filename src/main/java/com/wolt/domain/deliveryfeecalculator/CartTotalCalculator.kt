@@ -9,7 +9,7 @@ internal class CartTotalCalculator {
     }
 
     companion object {
-        private val REQUIRED_CART_VALUE = BigInteger.valueOf(1000)
+        private val REQUIRED_CART_VALUE = BigInteger.valueOf(10_00)
         private val NO_ADDITIONAL_FEE = BigInteger.ZERO
     }
 }

@@ -8,6 +8,6 @@ internal class FreeDeliveryCalculator {
     }
 
     companion object {
-        private val FREE_DELIVERY_LIMIT = BigInteger.valueOf(20000)
+        private val FREE_DELIVERY_LIMIT = BigInteger.valueOf(200_00)
     }
 }
