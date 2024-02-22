@@ -10,13 +10,10 @@ internal class TotalDeliveryFeeCalculator(
     private val finalFeeValidator: FinalFeeValidator
 ) {
     fun calculateTotal(orderData: OrderData): BigInteger {
-        return finalFeeValidator
-            .validate(
-                rushHoursCalculator
-                    .calculate(
+        return finalFeeValidator.validate(
+                rushHoursCalculator.calculate(
                         orderData.orderTime,
-                        calculateBaseDelivery(
-                            orderData.cartValue,
+                        calculateBaseDelivery(orderData.cartValue,
                             orderData.deliveryDistance,
                             orderData.numberOfItems
                         )
