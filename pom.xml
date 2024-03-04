@@ -7,7 +7,7 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>3.2.2</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <relativePath/>
     </parent>
     <groupId>com.example</groupId>
     <artifactId>delivery-fee-calculator</artifactId>
@@ -20,6 +20,7 @@
         <testcontainers.version>1.19.3</testcontainers.version>
         <lombok.version>1.18.30</lombok.version>
         <kotlin.version>1.9.22</kotlin.version>
+        <jackson-datatype-jsr310.version>2.15.3</jackson-datatype-jsr310.version>
     </properties>
     <dependencies>
         <dependency>
@@ -72,7 +73,6 @@
             <version>${kotlin.version}</version>
             <scope>test</scope>
         </dependency>
-
     </dependencies>
     <build>
         <plugins>
@@ -107,7 +107,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <jvmTarget>1.8</jvmTarget>
+                    <jvmTarget>17</jvmTarget>
                 </configuration>
             </plugin>
             <plugin>
